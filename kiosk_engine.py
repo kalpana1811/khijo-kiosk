@@ -6,7 +6,7 @@ The UI imports this file and calls get_session(uid) to get everything it needs.
 
 Two modes:
   SIMULATION = True  → no hardware needed (laptop dev)
-  SIMULATION = False → reads real RC522 RFID reader (Raspberry Pi)
+  SIMULATION = True → reads real RC522 RFID reader (Raspberry Pi)
 """
 
 import json

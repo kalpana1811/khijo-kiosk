@@ -19,6 +19,10 @@ def index():
 @app.route('/api/session')
 def session():
     try:
+        import kiosk_engine as ke
+        if ke.SIMULATION:
+            # Simulation: return waiting so welcome screen stays until guest btn clicked
+            return jsonify({"status": "waiting"})
         sess = kiosk_engine.get_session()
         return jsonify(_enrich(sess))
     except Exception as e:
@@ -49,6 +53,7 @@ def session_uid(uid):
                     "user": {
                         "name": user["name"],
                         "allergies": user.get("allergies", []),
+                        "avoid_tags": user.get("avoid", []),
                         "dietary_preferences": user.get("dietary_preferences", []),
                     },
                     "recommendations": recs,

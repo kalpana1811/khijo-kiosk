@@ -154,7 +154,7 @@ function renderWelcome(el) {
     <!-- Text -->
     <div class="flex flex-col items-center gap-3">
       <h2 style="font-size:2.25rem;font-weight:500;letter-spacing:-0.025em;margin:0">Tap your Aller card</h2>
-      <button id="guest-btn" style="font-size:1.25rem;color:#8B6F47;text-decoration:underline;background:none;border:none;cursor:pointer;padding:4px 0" onmouseover="this.style.color='#6D5737'" onmouseout="this.style.color='#8B6F47'">
+      <button onclick="guestLogin()" style="font-size:1.25rem;color:#8B6F47;text-decoration:underline;background:none;border:none;cursor:pointer;padding:4px 0" onmouseover="this.style.color='#6D5737'" onmouseout="this.style.color='#8B6F47'">
         I don't have Aller card
       </button>
     </div>
@@ -164,7 +164,7 @@ function renderWelcome(el) {
   if (guestBtn) {
     guestBtn.onclick = async () => {
       try {
-        const sess = await fetchSession('100001');
+        const sess = await fetchSession('1047571399431');
         if (sess && sess.status === 'ok') { state.session = sess; goGreeting(); }
       } catch(e) {
         console.error('Session fetch failed:', e);
@@ -183,14 +183,17 @@ async function pollRFID() {
   if (state.screen !== 'welcome') { state.rfidPolling = false; return; }
   try {
     const sess = await fetchSession();
-    if (sess.status === 'ok') {
+    // Only advance if we got a real card scan (status ok AND uid looks like real RFID)
+    if (sess && sess.status === 'ok' && sess.uid) {
       state.rfidPolling = false;
       state.session = sess;
       goGreeting();
       return;
     }
-  } catch(e) {}
-  setTimeout(pollRFID, 500);
+  } catch(e) {
+    // Network error or server error — just keep polling
+  }
+  setTimeout(pollRFID, 1000);
 }
 
 function goGreeting() {
@@ -282,6 +285,33 @@ function menuCardHTML(dish, idx, safe=true) {
   </div>`;
 }
 
+// ─── FULL MENU CARD (always has Add btn, shows allergen warning under name) ──
+function fullMenuCardHTML(dish, idx, safe, reasons) {
+  const name = dish.name || '';
+  const img  = dish.image || '';
+  const price = dish.price.toFixed(2);
+  const cat  = dish.category || '';
+  const fallbackStyle = `background: linear-gradient(135deg, ${catColor(cat)} 0%, ${catColorDark(cat)} 100%);`;
+  const imgHTML = img
+    ? `<img src="${img}" alt="${name}" class="w-full h-full object-cover">`
+    : `<div style="${fallbackStyle}" class="w-full h-full flex items-center justify-center"><span style="font-size:2.5rem">${catEmoji(cat)}</span></div>`;
+
+  return `
+  <div class="menu-card bg-[#EDE5D8] rounded-2xl overflow-hidden shadow-md flex flex-col cursor-pointer">
+    <div class="h-36 overflow-hidden flex-shrink-0 relative">
+      ${imgHTML}
+    </div>
+    <div class="p-3 flex flex-col gap-1 flex-1">
+      <h3 class="text-sm font-medium leading-tight">${name}</h3>
+      ${!safe ? `<p class="text-xs text-red-600 font-medium">⚠ ${reasons}</p>` : ''}
+      <div class="flex items-center justify-between mt-auto pt-1">
+        <span class="text-base font-semibold">£${price}</span>
+        <button class="add-btn px-3 py-1 rounded-lg bg-gray-900 text-white text-xs hover:bg-gray-700 transition-all whitespace-nowrap" data-idx="${idx}" data-name="${name}">+ Add</button>
+      </div>
+    </div>
+  </div>`;
+}
+
 // ─── MENU SCREEN ──────────────────────────────────────────────────────────
 function renderMenu(el) {
   try {
@@ -307,12 +337,15 @@ function renderMenu(el) {
 
     <!-- Action Buttons: flex justify-end gap-3 mb-6 -->
     <div class="flex justify-end gap-3 px-8 pt-6 pb-0">
+      <button id="logout-btn" class="px-5 py-2 border-2 border-red-300 text-red-500 rounded-lg hover:bg-red-50 transition-colors font-medium text-sm">
+        ✕ End session
+      </button>
       <button id="full-menu-btn" class="px-5 py-2 border-2 border-gray-900 rounded-lg hover:bg-gray-100 transition-colors font-medium">
         View full menu
       </button>
       <button id="cart-btn" class="relative px-5 py-2 border-2 border-gray-900 rounded-lg hover:bg-gray-100 transition-colors font-medium">
         Cart
-        ${cnt > 0 ? `<span class="absolute -top-2 -right-2 bg-gray-900 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center">${cnt}</span>` : ''}
+        <span id="cart-badge" class="absolute -top-2 -right-2 bg-gray-900 text-white text-xs w-6 h-6 rounded-full items-center justify-center" style="display:${cnt > 0 ? 'flex' : 'none'}">${cnt}</span>
       </button>
     </div>
 
@@ -340,6 +373,7 @@ function renderMenu(el) {
 
   el.querySelector('#full-menu-btn').onclick = () => { state.screen='fullmenu'; state.fullMenuCat=null; render(); };
   el.querySelector('#cart-btn').onclick = () => { state.screen='cart'; render(); };
+  el.querySelector('#logout-btn').onclick = () => { state.session=null; state.cart=[]; state.screen='welcome'; render(); };
 
   // Add button handlers — rec row
   el.querySelectorAll('#rec-row .add-btn').forEach((btn, i) => {
@@ -347,11 +381,9 @@ function renderMenu(el) {
       e.stopPropagation();
       cartAdd(recs[i]);
       btn.textContent = '✓ Added';
-      btn.classList.add('btn-added');
-      setTimeout(() => { btn.textContent = '+ Add'; btn.classList.remove('btn-added'); }, 900);
-      // refresh cart badge
-      document.querySelector('#cart-btn').outerHTML;
-      render(); // re-render to update badge — we re-render whole screen
+      btn.style.background = '#16a34a';
+      updateCartBadge(el);
+      setTimeout(() => { btn.textContent = '+ Add'; btn.style.background = ''; }, 900);
     };
   });
 
@@ -360,7 +392,10 @@ function renderMenu(el) {
     btn.onclick = (e) => {
       e.stopPropagation();
       cartAdd(safeMain[i]);
-      render();
+      btn.textContent = '✓ Added';
+      btn.style.background = '#16a34a';
+      updateCartBadge(el);
+      setTimeout(() => { btn.textContent = '+ Add'; btn.style.background = ''; }, 900);
     };
   });
   } catch(err) {
@@ -424,10 +459,11 @@ function renderFullMenu(el) {
 
     <!-- Grid of dishes -->
     <div class="flex-1 overflow-y-auto scroll-hide p-8 pt-4">
-      <div class="grid grid-cols-5 gap-4">
+      <div class="grid grid-cols-4 gap-6">
         ${dishes.map((d,i) => {
           const safe = safeSet.has(d.name);
-          return `<div class="relative">${menuCardHTML(d, i, safe)}${!safe?`<div class="absolute inset-0 rounded-2xl bg-black/20 flex items-center justify-center pointer-events-none"><span class="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">⚠ Not safe</span></div>`:''}</div>`;
+          const reasons = getUnsafeReasons(d, state.session);
+          return fullMenuCardHTML(d, i, safe, reasons);
         }).join('')}
       </div>
     </div>
@@ -438,11 +474,18 @@ function renderFullMenu(el) {
   el.querySelectorAll('.cat-tab').forEach(btn => {
     btn.onclick = () => { state.fullMenuCat = btn.dataset.cat; render(); };
   });
-  el.querySelectorAll('.add-btn').forEach((btn, i) => {
-    const d = dishes[i];
-    if (safeSet.has(d.name)) {
-      btn.onclick = (e) => { e.stopPropagation(); cartAdd(d); render(); };
-    }
+  el.querySelectorAll('.add-btn').forEach((btn) => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const name = btn.dataset.name;
+      const d = dishes.find(x => x.name === name);
+      if (d) {
+        cartAdd(d);
+        btn.textContent = '✓ Added';
+        btn.style.background = '#16a34a';
+        setTimeout(() => { btn.textContent = '+ Add'; btn.style.background = ''; render(); }, 900);
+      }
+    };
   });
 }
 
@@ -570,29 +613,204 @@ function renderCart(el) {
   });
   el.querySelectorAll('.view-ingr').forEach(btn => {
     btn.onclick = () => {
-      const dish = state.session?.safe_menu?.find(d=>d.name===btn.dataset.name)
+      const dish = state.session?.all_menu?.find(d=>d.name===btn.dataset.name)
+                || state.session?.safe_menu?.find(d=>d.name===btn.dataset.name)
                 || state.session?.recommendations?.find(d=>d.name===btn.dataset.name)
-                || {name:btn.dataset.name, allergens:[], avoid_tags:[]};
+                || {name:btn.dataset.name, allergens:[], avoid_tags:[], ingredients:[]};
       showIngredientsModal(dish);
     };
   });
 }
 
+// ─── DERIVE INGREDIENTS FROM DISH NAME + ALLERGENS ──────────────────────────
+function getIngredients(dish) {
+  const n = (dish.name || '').toLowerCase();
+  const allergens = dish.allergens || [];
+  const ingr = new Set();
+
+  // Noodle base
+  if (n.includes('udon'))                          ingr.add('udon noodles');
+  else if (n.includes('ramen') || n.includes('noodle soup')) ingr.add('ramen noodles');
+  else if (n.includes('yakisoba'))                 ingr.add('yakisoba noodles');
+  if (n.includes('noodle') || n.includes('ramen') || n.includes('udon') || n.includes('yakisoba')) {
+    ingr.add('dashi broth'); ingr.add('soy sauce'); ingr.add('mirin'); ingr.add('sesame oil'); ingr.add('spring onion');
+  }
+
+  // Rice
+  if (n.includes('rice bowl') || n.includes('teriyaki rice') || n.includes('curry rice') || n.includes('fried rice')) {
+    ingr.add('steamed jasmine rice'); ingr.add('sesame seeds');
+  }
+  if (n.includes('fried rice')) { ingr.add('egg'); ingr.add('soy sauce'); ingr.add('spring onion'); ingr.add('vegetable oil'); }
+
+  // Buns / Momos
+  if (n.includes('momo') || n.includes('bun')) {
+    ingr.add('steamed wheat bun dough'); ingr.add('garlic'); ingr.add('ginger'); ingr.add('soy sauce');
+  }
+
+  // Hotpot
+  if (n.includes('hotpot')) {
+    ingr.add('spicy broth'); ingr.add('chilli oil'); ingr.add('garlic'); ingr.add('ginger'); ingr.add('soy sauce'); ingr.add('spring onion'); ingr.add('tofu'); ingr.add('mushrooms'); ingr.add('pak choi');
+  }
+
+  // Gyoza
+  if (n.includes('gyoza')) {
+    ingr.add('gyoza wrapper'); ingr.add('cabbage'); ingr.add('garlic'); ingr.add('ginger'); ingr.add('soy sauce'); ingr.add('sesame oil');
+  }
+
+  // Spring rolls
+  if (n.includes('spring roll')) {
+    ingr.add('spring roll wrapper'); ingr.add('glass noodles'); ingr.add('carrot'); ingr.add('cabbage'); ingr.add('soy sauce');
+  }
+
+  // Tempura
+  if (n.includes('tempura')) {
+    ingr.add('tempura batter'); ingr.add('wheat flour'); ingr.add('cold sparkling water'); ingr.add('vegetable oil');
+  }
+
+  // Katsu
+  if (n.includes('katsu')) {
+    ingr.add('panko breadcrumbs'); ingr.add('katsu curry sauce'); ingr.add('onion'); ingr.add('potato'); ingr.add('carrot'); ingr.add('vegetable oil');
+  }
+
+  // Teriyaki sauce
+  if (n.includes('teriyaki')) {
+    ingr.add('teriyaki sauce'); ingr.add('mirin'); ingr.add('sake'); ingr.add('soy sauce');
+  }
+
+  // Curry
+  if (n.includes('curry')) {
+    ingr.add('curry sauce'); ingr.add('onion'); ingr.add('potato'); ingr.add('carrot'); ingr.add('garam masala');
+  }
+
+  // Spicy / chilli
+  if (n.includes('spicy') || n.includes('chilli')) {
+    ingr.add('chilli paste'); ingr.add('chilli oil'); ingr.add('garlic');
+  }
+
+  // Miso
+  if (n.includes('miso')) { ingr.add('white miso paste'); ingr.add('dashi'); }
+
+  // Proteins
+  if (n.includes('beef'))    { ingr.add('beef'); ingr.add('soy marinade'); }
+  if (n.includes('chicken')) { ingr.add('chicken'); ingr.add('garlic'); }
+  if (n.includes('pork'))    { ingr.add('pork'); ingr.add('ginger'); ingr.add('soy sauce'); }
+  if (n.includes('lamb'))    { ingr.add('lamb'); ingr.add('cumin'); ingr.add('coriander'); }
+  if (n.includes('duck'))    { ingr.add('duck'); ingr.add('hoisin sauce'); ingr.add('five spice'); }
+  if (n.includes('salmon'))  { ingr.add('salmon fillet'); ingr.add('teriyaki glaze'); }
+  if (n.includes('prawn') || n.includes('shrimp')) { ingr.add('king prawns'); ingr.add('garlic butter'); }
+  if (n.includes('seafood')) { ingr.add('mixed seafood'); ingr.add('squid'); ingr.add('prawns'); ingr.add('scallops'); }
+  if (n.includes('tofu'))    { ingr.add('firm tofu'); ingr.add('soy sauce'); }
+  if (n.includes('halloumi')){ ingr.add('halloumi cheese'); ingr.add('mint'); ingr.add('lemon'); }
+  if (n.includes('mushroom') || n.includes('fungi')) { ingr.add('shiitake mushrooms'); ingr.add('oyster mushrooms'); }
+  if (n.includes('pumpkin')) { ingr.add('pumpkin'); ingr.add('miso glaze'); }
+  if (n.includes('edamame')) { ingr.add('edamame beans'); ingr.add('sea salt'); }
+
+  // Veg generic
+  if (n.includes('vegetable') || n.includes('veg ') || n.includes('veg+')) {
+    ingr.add('mixed seasonal vegetables'); ingr.add('spring onion'); ingr.add('garlic');
+  }
+
+  // Egg
+  if (n.includes('tea egg'))     { ingr.add('egg'); ingr.add('soy sauce'); ingr.add('five spice'); ingr.add('black tea'); }
+  if (n.includes('braised egg')) { ingr.add('egg'); ingr.add('soy sauce'); ingr.add('mirin'); ingr.add('sake'); }
+
+  // Drinks
+  if (n.includes('drink'))       { ingr.add('choice of soft drink'); }
+  if (n.includes('green tea'))   { ingr.add('green tea leaves'); ingr.add('hot water'); }
+  if (n.includes('mango'))       { ingr.add('mango juice'); ingr.add('sugar'); ingr.add('ice'); }
+  if (n.includes('lemonade'))    { ingr.add('lemon juice'); ingr.add('sugar syrup'); ingr.add('sparkling water'); }
+  if (n.includes('cola') || n.includes('soda')) { ingr.add('carbonated soft drink'); }
+  if (n.includes('juice'))       { ingr.add('fresh fruit juice'); }
+
+  // Sides
+  if (n.includes('rice') && ingr.size === 0) { ingr.add('steamed jasmine rice'); }
+
+  // Always add allergens as explicit items if not already implied
+  if (allergens.includes('peanuts') && !Array.from(ingr).some(i => i.includes('peanut'))) ingr.add('peanut sauce');
+  if (allergens.includes('dairy')   && !Array.from(ingr).some(i => i.includes('butter') || i.includes('cream') || i.includes('cheese'))) ingr.add('dairy');
+  if (allergens.includes('sesame')  && !Array.from(ingr).some(i => i.includes('sesame'))) ingr.add('sesame oil');
+  if (allergens.includes('fish')    && !Array.from(ingr).some(i => i.includes('fish'))) ingr.add('fish sauce');
+  if (allergens.includes('shellfish') && !Array.from(ingr).some(i => i.includes('prawn') || i.includes('seafood'))) ingr.add('shellfish');
+  if (allergens.includes('mustard') && !Array.from(ingr).some(i => i.includes('mustard'))) ingr.add('mustard');
+  if (allergens.includes('celery')  && !Array.from(ingr).some(i => i.includes('celery'))) ingr.add('celery');
+
+  const result = Array.from(ingr);
+  return result.length > 0 ? result : ['rice', 'soy sauce', 'sesame oil', 'spring onion'];
+}
+
 // ─── INGREDIENTS MODAL ────────────────────────────────────────────────────
 function showIngredientsModal(dish) {
+  const userAllergens = state.session?.user?.allergies || [];
+  const dishAllergens = dish.allergens || [];
+  const ingredients = getIngredients(dish);
+
+  // Render each ingredient — highlight if it maps to a known allergen
+  const allergenKeywords = {
+    'gluten': ['wheat','flour','noodle','dough','breadcrumb','panko','udon','soy sauce','miso','teriyaki','yakisoba'],
+    'soy': ['soy','miso','tofu','edamame','teriyaki','yakisoba'],
+    'eggs': ['egg','mayonnaise','katsu'],
+    'peanuts': ['peanut'],
+    'dairy': ['butter','cream','cheese','milk','halloumi'],
+    'sesame': ['sesame'],
+    'fish': ['fish','dashi','anchovy'],
+    'shellfish': ['prawn','shrimp','crab','lobster','seafood'],
+    'celery': ['celery'],
+    'mustard': ['mustard'],
+    'sulphites': ['wine','vinegar','dried fruit'],
+  };
+
+  function isAllergenIngredient(ingredient) {
+    const lower = ingredient.toLowerCase();
+    for (const [allergen, keywords] of Object.entries(allergenKeywords)) {
+      if (dishAllergens.includes(allergen) && keywords.some(k => lower.includes(k))) {
+        return allergen;
+      }
+    }
+    return null;
+  }
+
+  const ingredientHTML = ingredients.length > 0
+    ? ingredients.map(ing => {
+        const allergen = isAllergenIngredient(ing);
+        const isMyAllergen = allergen && userAllergens.includes(allergen);
+        const isOtherAllergen = allergen && !isMyAllergen;
+        if (isMyAllergen) {
+          return `<span class="px-2 py-0.5 bg-red-100 text-red-700 rounded-md text-sm font-semibold border border-red-200" title="Your allergen: ${allergen}">⚠ ${ing}</span>`;
+        } else if (isOtherAllergen) {
+          return `<span class="px-2 py-0.5 bg-amber-50 text-amber-800 rounded-md text-sm border border-amber-200" title="Contains: ${allergen}">${ing}</span>`;
+        }
+        return `<span class="px-2 py-0.5 bg-white text-gray-700 rounded-md text-sm border border-gray-200">${ing}</span>`;
+      }).join('')
+    : '<p class="text-gray-500 text-sm">Please ask staff for full ingredient list</p>';
+
+  const myAllergens = dishAllergens.filter(a => userAllergens.includes(a));
+  const warningHTML = myAllergens.length > 0
+    ? `<div class="bg-red-50 border border-red-200 rounded-xl p-3 mb-4 flex items-center gap-2">
+        <span class="text-red-600 font-bold">⚠</span>
+        <span class="text-red-700 text-sm font-medium">Contains your allergens: ${myAllergens.join(', ')}</span>
+      </div>`
+    : `<div class="bg-green-50 border border-green-200 rounded-xl p-3 mb-4 flex items-center gap-2">
+        <span class="text-green-600">✓</span>
+        <span class="text-green-700 text-sm font-medium">Safe for your allergies</span>
+      </div>`;
+
   const overlay = document.createElement('div');
   overlay.className = 'fixed inset-0 bg-black/40 flex items-center justify-center z-50';
   overlay.innerHTML = `
-  <div class="bg-[#F5F0E8] rounded-2xl p-8 w-96 shadow-2xl">
-    <h3 class="text-xl font-bold mb-4">${dish.name}</h3>
-    <hr class="border-gray-300 mb-4"/>
-    ${(dish.allergens||[]).length
-      ? `<p class="text-sm text-gray-500 mb-2">Contains allergens:</p>
-         <p class="font-bold text-red-600 mb-4">${dish.allergens.join(', ')}</p>`
-      : `<p class="text-green-600 font-medium mb-4">✓ No major allergens declared</p>`}
-    ${(dish.avoid_tags||[]).length
-      ? `<p class="text-sm text-gray-500 mb-4">May contain: ${dish.avoid_tags.join(', ')}</p>` : ''}
-    <button class="close-modal px-6 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors">Close</button>
+  <div class="bg-[#F5F0E8] rounded-2xl p-6 shadow-2xl" style="width:440px;max-height:80vh;display:flex;flex-direction:column">
+    <h3 class="text-xl font-bold mb-1">${dish.name}</h3>
+    <p class="text-sm text-gray-500 mb-4">£${dish.price?.toFixed(2) || ''}</p>
+    ${warningHTML}
+    <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Ingredients</p>
+    <div class="flex flex-wrap gap-1.5 overflow-y-auto mb-4" style="max-height:220px">
+      ${ingredientHTML}
+    </div>
+    <div class="flex gap-2 text-xs text-gray-400 mb-4">
+      <span class="px-2 py-0.5 bg-red-100 text-red-600 rounded border border-red-200">⚠ your allergen</span>
+      <span class="px-2 py-0.5 bg-amber-50 text-amber-700 rounded border border-amber-200">other allergen</span>
+      <span class="px-2 py-0.5 bg-white text-gray-500 rounded border border-gray-200">safe</span>
+    </div>
+    <button class="close-modal w-full py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors">Close</button>
   </div>`;
   document.getElementById('app').appendChild(overlay);
   overlay.querySelector('.close-modal').onclick = () => overlay.remove();
@@ -678,6 +896,58 @@ function catEmoji(cat) {
   const m = {"Noodle Soup":"🍜","Yakisoba":"🍝","Japanese Rice Bowl":"🍱","Sets":"🥢",
              "Momo Buns":"🥟","Hotpot":"🫕","Sides":"🥗","Drinks":"🍵"};
   return m[cat] || "🍽";
+}
+
+// ─── Get reasons why dish is unsafe for this user ───────────────────────────
+function getUnsafeReasons(dish, session) {
+  if (!session || !dish) return 'allergen';
+  const userAllergens = session.user?.allergies || [];
+  const userAvoid = session.user?.avoid || session.user?.avoid_tags || [];
+  const dietPrefs = session.user?.dietary_preferences || [];
+  
+  const reasons = [];
+  
+  // Check allergens
+  const dishAllergens = dish.allergens || [];
+  const matchedAllergens = dishAllergens.filter(a => userAllergens.includes(a));
+  if (matchedAllergens.length > 0) reasons.push(...matchedAllergens);
+  
+  // Check avoid tags
+  const dishAvoid = dish.avoid_tags || [];
+  const matchedAvoid = dishAvoid.filter(t => userAvoid.includes(t));
+  if (matchedAvoid.length > 0) reasons.push(...matchedAvoid);
+  
+  // Check dietary
+  if (dietPrefs.includes('vegetarian') && dish.diet_tag === 'non-vegetarian') reasons.push('meat');
+  if (dietPrefs.includes('vegan') && dish.diet_tag !== 'vegan') reasons.push('animal products');
+  if (dietPrefs.includes('halal') && !dish.halal) reasons.push('not halal');
+  
+  return reasons.length > 0 ? reasons.join(', ') : 'allergen';
+}
+
+// ─── Update cart badge without full re-render ───────────────────────────────
+function updateCartBadge(el) {
+  const cnt = cartCount();
+  const badge = el.querySelector('#cart-badge');
+  if (badge) {
+    badge.textContent = cnt;
+    badge.style.display = cnt > 0 ? 'flex' : 'none';
+  }
+}
+
+// ─── Guest login (called directly from HTML onclick) ────────────────────────
+async function guestLogin() {
+  try {
+    const sess = await fetchSession('1047571399431');
+    if (sess && sess.status === 'ok') {
+      state.session = sess;
+      goGreeting();
+    } else {
+      console.error('Guest login failed:', sess);
+    }
+  } catch(e) {
+    console.error('Guest login error:', e);
+  }
 }
 
 // ─── Boot ─────────────────────────────────────────────────────────────────

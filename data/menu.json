@@ -4,598 +4,978 @@
     "items": {
       "S001": {
         "name": "Spicy Beef Ramen + Spicy Marinated Beef Buns",
-        "price": 14.80,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["beef"],
+        "price": 14.8,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "S002": {
         "name": "Spicy Beef Ramen + Tea Egg + Random Drink",
-        "price": 12.70,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["beef"],
+        "price": 12.7,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "S003": {
         "name": "Grilled Chicken Teriyaki + 2 Veg Gyoza + Random Drink",
-        "price": 13.40,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 13.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "S004": {
         "name": "Chilli Chicken + Tea Egg + Random Drink",
-        "price": 15.50,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 15.5,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": true
       },
       "S005": {
         "name": "Beef Curry + 2 Veg Gyoza + Random Drink",
-        "price": 13.40,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["beef"],
+        "price": 13.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "S006": {
         "name": "Braised Pork Momo + Braised Egg + Random Drink",
-        "price": 9.30,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["pork"],
+        "price": 9.3,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "S007": {
         "name": "Spicy Pork Ball Ramen + Braised Egg + Random Drink",
-        "price": 12.70,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["pork"],
+        "price": 12.7,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       }
     }
   },
-
   "noodle_soup": {
     "category_label": "Noodle Soup",
     "items": {
       "N001": {
         "name": "Tofu Katsu Noodle Soup",
-        "price": 8.20,
-        "allergens": ["gluten", "soy"],
+        "price": 8.2,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegetarian",
         "halal": true
       },
       "N002": {
         "name": "Chilli Chicken Udon",
-        "price": 8.20,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 8.2,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N003": {
         "name": "Halal Chicken Katsu Noodle Soup",
-        "price": 8.50,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 8.5,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": true
       },
       "N004": {
         "name": "Chilli Chicken Ramen",
-        "price": 8.20,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 8.2,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N005": {
         "name": "Spicy Pork Rib Udon",
-        "price": 8.40,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["pork"],
+        "price": 8.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N006": {
         "name": "Spicy Pork Rib Ramen",
-        "price": 8.40,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["pork"],
+        "price": 8.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N007": {
         "name": "Halal Chicken Udon",
-        "price": 8.50,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 8.5,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": true
       },
       "N008": {
         "name": "Halal Chicken Ramen",
-        "price": 8.50,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 8.5,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": true
       },
       "N009": {
         "name": "Beef Sliced Noodle Soup",
-        "price": 8.20,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["beef"],
+        "price": 8.2,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N010": {
         "name": "Chicken Gyoza Noodle Soup",
-        "price": 7.90,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 7.9,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N011": {
         "name": "Vegetable Gyoza Noodle Soup",
-        "price": 7.90,
-        "allergens": ["gluten", "soy"],
+        "price": 7.9,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "N012": {
         "name": "Pork Meatball Noodle Soup",
-        "price": 7.90,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["pork"],
+        "price": 7.9,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N013": {
         "name": "Braised Pork Belly Noodle Soup",
-        "price": 8.70,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["pork"],
+        "price": 8.7,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N014": {
         "name": "Braised Pork Rib Noodle Soup",
-        "price": 8.70,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["pork"],
+        "price": 8.7,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N015": {
         "name": "Prawn Katsu Noodle Soup",
-        "price": 8.20,
-        "allergens": ["gluten", "soy", "shellfish", "eggs"],
-        "avoid_tags": ["seafood", "prawns"],
+        "price": 8.2,
+        "allergens": [
+          "gluten",
+          "soy",
+          "shellfish",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "seafood",
+          "prawns"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N016": {
         "name": "Chicken Katsu Noodle Soup",
-        "price": 7.90,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 7.9,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N017": {
         "name": "Spicy Pork Belly Udon",
-        "price": 8.90,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["pork"],
+        "price": 8.9,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N018": {
         "name": "Spicy Pork Belly Ramen",
-        "price": 8.90,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["pork"],
+        "price": 8.9,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N019": {
         "name": "Spicy Beef Udon",
-        "price": 8.40,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["beef"],
+        "price": 8.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "N020": {
         "name": "Spicy Beef Ramen",
-        "price": 8.40,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["beef"],
+        "price": 8.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       }
     }
   },
-
   "yakisoba": {
     "category_label": "Yakisoba",
     "items": {
       "Y001": {
         "name": "Veg Gyoza Yakisoba",
-        "price": 10.40,
-        "allergens": ["gluten", "soy"],
+        "price": 10.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "Y002": {
         "name": "Pumpkin Yakisoba",
-        "price": 10.40,
-        "allergens": ["gluten", "soy"],
+        "price": 10.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "Y003": {
         "name": "Halal Chicken Yakisoba",
-        "price": 11.40,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 11.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": true
       },
       "Y004": {
         "name": "Chilli Chicken Yakisoba",
-        "price": 11.40,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 11.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "Y005": {
         "name": "Pork Meatball Yakisoba",
-        "price": 10.90,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["pork"],
+        "price": 10.9,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "Y006": {
         "name": "Seafood Tempura Yakisoba",
-        "price": 11.40,
-        "allergens": ["gluten", "soy", "shellfish", "eggs", "fish"],
-        "avoid_tags": ["seafood", "fish"],
+        "price": 11.4,
+        "allergens": [
+          "gluten",
+          "soy",
+          "shellfish",
+          "eggs",
+          "fish"
+        ],
+        "avoid_tags": [
+          "seafood",
+          "fish"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "Y007": {
         "name": "Veg Tempura Yakisoba",
-        "price": 10.80,
-        "allergens": ["gluten", "soy", "eggs"],
+        "price": 10.8,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "Y008": {
         "name": "Prawn Katsu Yakisoba",
-        "price": 10.90,
-        "allergens": ["gluten", "soy", "shellfish", "eggs"],
-        "avoid_tags": ["seafood", "prawns"],
+        "price": 10.9,
+        "allergens": [
+          "gluten",
+          "soy",
+          "shellfish",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "seafood",
+          "prawns"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "Y009": {
         "name": "Chicken Gyoza Yakisoba",
-        "price": 10.40,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 10.4,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "Y010": {
         "name": "Tofu Katsu Yakisoba",
-        "price": 10.40,
-        "allergens": ["gluten", "soy", "eggs"],
+        "price": 10.4,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "Y011": {
         "name": "Beef Sliced Yakisoba",
-        "price": 10.40,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["beef"],
+        "price": 10.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "Y012": {
         "name": "Grilled Chicken Yakisoba",
-        "price": 10.40,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 10.4,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "Y013": {
         "name": "Chicken Katsu Yakisoba",
-        "price": 10.40,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 10.4,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       }
     }
   },
-
   "rice_bowl": {
     "category_label": "Japanese Rice Bowl",
     "items": {
       "R001": {
         "name": "Beef Slice Halal Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["beef"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": true
       },
       "R002": {
         "name": "Veg Tempura Teriyaki Rice",
-        "price": 10.50,
-        "allergens": ["gluten", "soy", "eggs"],
+        "price": 10.5,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "R003": {
         "name": "Pumpkin Teriyaki Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "R004": {
         "name": "Seafood Tempura Teriyaki Rice",
-        "price": 10.80,
-        "allergens": ["gluten", "soy", "shellfish", "eggs", "fish"],
-        "avoid_tags": ["seafood", "fish"],
+        "price": 10.8,
+        "allergens": [
+          "gluten",
+          "soy",
+          "shellfish",
+          "eggs",
+          "fish"
+        ],
+        "avoid_tags": [
+          "seafood",
+          "fish"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R005": {
         "name": "Salmon Katsu Teriyaki Rice",
-        "price": 10.80,
-        "allergens": ["gluten", "soy", "fish", "eggs"],
-        "avoid_tags": ["fish", "seafood"],
+        "price": 10.8,
+        "allergens": [
+          "gluten",
+          "soy",
+          "fish",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "fish",
+          "seafood"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R006": {
         "name": "Takoyaki Curry Rice",
-        "price": 14.50,
-        "allergens": ["gluten", "soy", "shellfish", "eggs", "fish"],
-        "avoid_tags": ["seafood", "octopus"],
+        "price": 14.5,
+        "allergens": [
+          "gluten",
+          "soy",
+          "shellfish",
+          "eggs",
+          "fish"
+        ],
+        "avoid_tags": [
+          "seafood",
+          "octopus"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R007": {
         "name": "Chilli Chicken Halal Rice",
-        "price": 8.80,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 8.8,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": true
       },
       "R008": {
         "name": "Beef Slice Teriyaki Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["beef"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R009": {
         "name": "Pork Meatball Teriyaki Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["pork"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R010": {
         "name": "Chicken Katsu Curry Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R011": {
         "name": "Tofu Katsu Curry Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy", "eggs"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "R012": {
         "name": "Chicken Gyoza Curry Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R013": {
         "name": "Tofu Teriyaki Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "R014": {
         "name": "Veg Tempura Curry Rice",
-        "price": 10.50,
-        "allergens": ["gluten", "soy", "eggs"],
+        "price": 10.5,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "R015": {
         "name": "Prawn Katsu Curry Rice",
-        "price": 10.80,
-        "allergens": ["gluten", "soy", "shellfish", "eggs"],
-        "avoid_tags": ["seafood", "prawns"],
+        "price": 10.8,
+        "allergens": [
+          "gluten",
+          "soy",
+          "shellfish",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "seafood",
+          "prawns"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R016": {
         "name": "Pork Meatball Curry Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["pork"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R017": {
         "name": "Pumpkin Curry Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "R018": {
         "name": "Veg Gyoza Curry Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "R019": {
         "name": "Beef Curry Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["beef"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R020": {
         "name": "Seafood Tempura Curry Rice",
-        "price": 10.80,
-        "allergens": ["gluten", "soy", "shellfish", "eggs", "fish"],
-        "avoid_tags": ["seafood", "fish"],
+        "price": 10.8,
+        "allergens": [
+          "gluten",
+          "soy",
+          "shellfish",
+          "eggs",
+          "fish"
+        ],
+        "avoid_tags": [
+          "seafood",
+          "fish"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R021": {
         "name": "Salmon Katsu Curry Rice",
-        "price": 10.80,
-        "allergens": ["gluten", "soy", "fish", "eggs"],
-        "avoid_tags": ["fish", "seafood"],
+        "price": 10.8,
+        "allergens": [
+          "gluten",
+          "soy",
+          "fish",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "fish",
+          "seafood"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R022": {
         "name": "Grilled Unagi Eel Rice",
-        "price": 14.50,
-        "allergens": ["gluten", "soy", "fish"],
-        "avoid_tags": ["fish", "seafood", "eel"],
+        "price": 14.5,
+        "allergens": [
+          "gluten",
+          "soy",
+          "fish"
+        ],
+        "avoid_tags": [
+          "fish",
+          "seafood",
+          "eel"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R023": {
         "name": "Grilled Chicken Teriyaki Rice",
-        "price": 10.00,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 10.0,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "R024": {
         "name": "Halal Chicken Katsu Curry Rice",
-        "price": 10.80,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 10.8,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": true
       }
     }
   },
-
   "momo_buns": {
     "category_label": "Momo Buns",
     "items": {
       "M001": {
         "name": "Japanese Sausage Momo",
-        "price": 5.20,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["pork"],
+        "price": 5.2,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "M002": {
         "name": "Spicy Beef Momo",
-        "price": 5.20,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["beef"],
+        "price": 5.2,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "beef"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "M003": {
         "name": "Pork Belly Momo",
-        "price": 5.30,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["pork"],
+        "price": 5.3,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "pork"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "M004": {
         "name": "Prawn Katsu Momo",
-        "price": 5.20,
-        "allergens": ["gluten", "soy", "shellfish", "eggs"],
-        "avoid_tags": ["seafood", "prawns"],
+        "price": 5.2,
+        "allergens": [
+          "gluten",
+          "soy",
+          "shellfish",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "seafood",
+          "prawns"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "M005": {
         "name": "Chicken Katsu Halal Momo",
-        "price": 4.80,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 4.8,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": true
       },
       "M006": {
         "name": "Tofu Katsu Momo",
-        "price": 4.80,
-        "allergens": ["gluten", "soy", "eggs"],
+        "price": 4.8,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       }
     }
   },
-
   "hotpot": {
     "category_label": "Hotpot",
     "items": {
       "H001": {
         "name": "Hotpot Without Soup",
         "price": 15.49,
-        "allergens": ["gluten", "soy"],
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "non-vegetarian",
         "halal": false
@@ -603,106 +983,149 @@
       "H002": {
         "name": "Hotpot With Soup",
         "price": 15.49,
-        "allergens": ["gluten", "soy"],
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "non-vegetarian",
         "halal": false
       }
     }
   },
-
   "sides": {
     "category_label": "Sides",
     "items": {
       "SI001": {
         "name": "Glutinous Rice Cake",
-        "price": 8.00,
-        "allergens": ["tree nuts"],
+        "price": 8.0,
+        "allergens": [
+          "tree nuts"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "SI002": {
         "name": "Japanese Fried Chicken",
-        "price": 5.50,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 5.5,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "SI003": {
         "name": "Spicy Chicken Wings",
-        "price": 4.50,
-        "allergens": ["gluten", "soy"],
-        "avoid_tags": ["chicken"],
+        "price": 4.5,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "SI004": {
         "name": "Apple Gyoza",
-        "price": 3.50,
-        "allergens": ["gluten"],
+        "price": 3.5,
+        "allergens": [
+          "gluten"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "SI005": {
         "name": "Tea Egg",
-        "price": 2.00,
-        "allergens": ["eggs", "soy"],
+        "price": 2.0,
+        "allergens": [
+          "eggs",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegetarian",
         "halal": true
       },
       "SI006": {
         "name": "Spring Rolls",
-        "price": 4.00,
-        "allergens": ["gluten", "soy"],
+        "price": 4.0,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegetarian",
         "halal": true
       },
       "SI007": {
         "name": "Takoyaki",
-        "price": 5.50,
-        "allergens": ["gluten", "soy", "shellfish", "eggs", "fish"],
-        "avoid_tags": ["seafood", "octopus"],
+        "price": 5.5,
+        "allergens": [
+          "gluten",
+          "soy",
+          "shellfish",
+          "eggs",
+          "fish"
+        ],
+        "avoid_tags": [
+          "seafood",
+          "octopus"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "SI008": {
         "name": "Vegetable Gyoza",
-        "price": 3.50,
-        "allergens": ["gluten", "soy"],
+        "price": 3.5,
+        "allergens": [
+          "gluten",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegan",
         "halal": true
       },
       "SI009": {
         "name": "Chicken Gyoza",
-        "price": 3.50,
-        "allergens": ["gluten", "soy", "eggs"],
-        "avoid_tags": ["chicken"],
+        "price": 3.5,
+        "allergens": [
+          "gluten",
+          "soy",
+          "eggs"
+        ],
+        "avoid_tags": [
+          "chicken"
+        ],
         "diet_tag": "non-vegetarian",
         "halal": false
       },
       "SI010": {
         "name": "Braised Egg",
-        "price": 2.00,
-        "allergens": ["eggs", "soy"],
+        "price": 2.0,
+        "allergens": [
+          "eggs",
+          "soy"
+        ],
         "avoid_tags": [],
         "diet_tag": "vegetarian",
         "halal": true
       }
     }
   },
-
   "drinks": {
     "category_label": "Drinks",
     "items": {
       "D001": {
         "name": "Green Tea 500ml",
-        "price": 2.80,
+        "price": 2.8,
         "allergens": [],
         "avoid_tags": [],
         "diet_tag": "vegan",
@@ -710,7 +1133,7 @@
       },
       "D002": {
         "name": "Still Water 500ml",
-        "price": 1.50,
+        "price": 1.5,
         "allergens": [],
         "avoid_tags": [],
         "diet_tag": "vegan",
@@ -718,7 +1141,7 @@
       },
       "D003": {
         "name": "Coke 330ml",
-        "price": 1.80,
+        "price": 1.8,
         "allergens": [],
         "avoid_tags": [],
         "diet_tag": "vegan",
@@ -726,7 +1149,7 @@
       },
       "D004": {
         "name": "Ice Tea 500ml",
-        "price": 2.80,
+        "price": 2.8,
         "allergens": [],
         "avoid_tags": [],
         "diet_tag": "vegan",
@@ -734,7 +1157,7 @@
       },
       "D005": {
         "name": "Aloe Vera Drink 500ml",
-        "price": 2.80,
+        "price": 2.8,
         "allergens": [],
         "avoid_tags": [],
         "diet_tag": "vegan",
@@ -742,7 +1165,7 @@
       },
       "D006": {
         "name": "San Pellegrino Orange 330ml",
-        "price": 2.20,
+        "price": 2.2,
         "allergens": [],
         "avoid_tags": [],
         "diet_tag": "vegan",
@@ -750,7 +1173,7 @@
       },
       "D007": {
         "name": "San Pellegrino Lemon 330ml",
-        "price": 2.20,
+        "price": 2.2,
         "allergens": [],
         "avoid_tags": [],
         "diet_tag": "vegan",
@@ -758,7 +1181,7 @@
       },
       "D008": {
         "name": "Diet Coke 330ml",
-        "price": 1.80,
+        "price": 1.8,
         "allergens": [],
         "avoid_tags": [],
         "diet_tag": "vegan",

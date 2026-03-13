@@ -63,7 +63,7 @@ def score_dish(dish, user, history_counter, time_of_day):
             if PREF_BOOST_RULES[pref_lower](dish):
                 score += WEIGHT_PREF_MATCH
 
-    # Small price penalty
+    
     score -= dish["price"] * 0.1
 
     return round(score, 2)

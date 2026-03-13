@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=1024, height=400, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="viewport" content="width=1024, height=600, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>KHIJO</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -23,7 +23,9 @@
   body { margin: 0; padding: 0; background: #F5F0E8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #F5F0E8; }
   * { box-sizing: border-box; }
-  #app { width: 1024px; height: 400px; margin: 0 auto; background: #F5F0E8; overflow: hidden; position: relative; }
+  #app { width: 1024px; height: 600px; margin: 0 auto; background: #F5F0E8; overflow: hidden; position: relative; }
+  .overflow-y-auto, .overflow-x-auto { -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+  .overflow-x-auto { touch-action: pan-x; }
 
   /* Hide scrollbar but keep scrolling */
   .scroll-hide::-webkit-scrollbar { display: none; }
@@ -268,39 +270,29 @@ function render() {
 // "Tap your Aller card" text-4xl font-medium
 // "I don't have Aller card" text-xl text-[#8B6F47] underline
 function renderWelcome(el) {
-  el.innerHTML = `
-  <div class="w-full h-full flex flex-col items-center justify-center px-16 py-12" style="background:#F5F0E8">
-    <!-- Logo: text-6xl + text-5xl font-bold tracking-tight -->
-    <div class="flex flex-col items-center mb-16">
-      <div style="font-size:4rem;line-height:1;margin-bottom:8px">🐙</div>
-      <div style="font-size:3rem;font-weight:700;letter-spacing:-0.025em">KHIJO</div>
+  el.innerHTML = ` <div class="w-full h-full flex flex-col items-center justify-center" style="background:#F5F0E8;padding:20px 40px">
+    <div class="flex flex-col items-center" style="margin-bottom:20px">
+      <div style="font-size:3rem;line-height:1;margin-bottom:6px">🐙</div>
+      <div style="font-size:2.25rem;font-weight:700;letter-spacing:-0.025em">KHIJO</div>
     </div>
-
-    <!-- Glowing circle: w-64 h-64 (256px) with outer glow blur -->
-    <div class="relative mb-12" style="width:256px;height:256px">
-      <!-- Outer glow -->
-      <div style="position:absolute;inset:-40px;border-radius:50%;background:radial-gradient(circle, rgba(232,220,200,0.7) 0%, rgba(212,196,168,0.3) 70%, transparent 100%);filter:blur(24px)"></div>
-      <!-- Main gradient circle -->
-      <div style="position:relative;width:256px;height:256px;border-radius:50%;background:linear-gradient(135deg,#EDE5D8 0%,#E0D5C3 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 20px 60px rgba(0,0,0,0.15)">
-        <!-- Inner white circle w-48 h-48 (192px) -->
-        <div style="width:192px;height:192px;border-radius:50%;background:#F5F0E8;display:flex;align-items:center;justify-content:center">
-          <!-- CreditCard w-24 h-24 strokeWidth=1.5 text-gray-800 -->
-          <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <div style="position:relative;width:200px;height:200px;margin-bottom:20px">
+      <div style="position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(circle, rgba(232,220,200,0.7) 0%, rgba(212,196,168,0.3) 70%, transparent 100%);filter:blur(20px)"></div>
+      <div style="position:relative;width:200px;height:200px;border-radius:50%;background:linear-gradient(135deg,#EDE5D8 0%,#E0D5C3 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 16px 48px rgba(0,0,0,0.12)">
+        <div style="width:150px;height:150px;border-radius:50%;background:#F5F0E8;display:flex;align-items:center;justify-content:center">
+          <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <rect width="20" height="14" x="2" y="5" rx="2"/>
             <line x1="2" x2="22" y1="10" y2="10"/>
           </svg>
         </div>
       </div>
     </div>
-
-    <!-- Text -->
-    <div class="flex flex-col items-center gap-3">
-      <h2 style="font-size:2.25rem;font-weight:500;letter-spacing:-0.025em;margin:0">Tap your Aller card</h2>
-      <button onclick="guestLogin()" style="font-size:1.25rem;color:#8B6F47;text-decoration:underline;background:none;border:none;cursor:pointer;padding:4px 0" onmouseover="this.style.color='#6D5737'" onmouseout="this.style.color='#8B6F47'">
+    <div class="flex flex-col items-center" style="gap:10px">
+      <h2 style="font-size:1.875rem;font-weight:500;letter-spacing:-0.025em;margin:0">Tap your Aller card</h2>
+      <button onclick="guestLogin()" style="font-size:1rem;color:#8B6F47;text-decoration:underline;background:none;border:none;cursor:pointer;padding:4px 0" onmouseover="this.style.color='#6D5737'" onmouseout="this.style.color='#8B6F47'">
         I don't have Aller card
       </button>
     </div>
-  </div>`;
+  </div>``;
 
   const guestBtn = document.getElementById('guest-btn');
   if (guestBtn) {
@@ -358,7 +350,7 @@ function renderGreeting(el) {
   <div class="w-full h-full flex flex-col bg-[#F5F0E8]">
     ${headerHTML()}
     <div class="flex-1 flex flex-col items-center justify-center gap-4">
-      <h1 class="text-5xl font-bold">Hi ${name} 👋</h1>
+      <h1 style="font-size:2.5rem;font-weight:700">Hi ${name} 👋</h1>
       ${allergies.length ? `<p class="text-lg text-[#8B6F47]">Filtering out: ${allergies.join(', ')}</p>` : ''}
       <p class="text-lg text-gray-500">Building your personalised menu…</p>
       <div class="flex gap-3 mt-2">
@@ -415,7 +407,7 @@ function menuCardHTML(dish, idx, safe=true) {
 
   return `
   <div class="menu-card min-w-[200px] bg-[#EDE5D8] rounded-2xl overflow-hidden shadow-md flex flex-col flex-shrink-0 cursor-pointer">
-    <div class="h-36 overflow-hidden flex-shrink-0">
+    <div class="h-28 overflow-hidden flex-shrink-0">
       ${imgHTML}
     </div>
     <div class="p-4 flex flex-col gap-2 flex-1">
@@ -442,7 +434,7 @@ function fullMenuCardHTML(dish, idx, safe, reasons) {
 
   return `
   <div class="menu-card bg-[#EDE5D8] rounded-2xl overflow-hidden shadow-md flex flex-col cursor-pointer">
-    <div class="h-36 overflow-hidden flex-shrink-0 relative">
+    <div class="h-28 overflow-hidden flex-shrink-0 relative">
       ${imgHTML}
     </div>
     <div class="p-3 flex flex-col gap-1 flex-1">
@@ -468,19 +460,19 @@ function renderMenu(el) {
   el.innerHTML = `
   <div class="w-full h-full flex flex-col bg-[#F5F0E8]">
     <!-- Header: flex items-center justify-between mb-8 -->
-    <div class="flex items-center justify-between px-8 pt-8 pb-0">
+    <div class="flex items-center justify-between px-6 pt-3 pb-0">
       <div class="flex items-center gap-2">
-        <h1 class="text-3xl">Hi ${sess?.user?.name || ''}</h1>
+        <h1 style="font-size:1.5rem;font-weight:600">Hi ${sess?.user?.name || ''}</h1>
         <span class="text-3xl">👋</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-5xl">🐙</span>
-        <span class="text-4xl font-bold tracking-tight">KHIJO</span>
+        <span style="font-size:2rem">🐙</span>
+        <span style="font-size:1.75rem;font-weight:700">KHIJO</span>
       </div>
     </div>
 
     <!-- Action Buttons: flex justify-end gap-3 mb-6 -->
-    <div class="flex justify-end gap-3 px-8 pt-6 pb-0">
+    <div class="flex justify-end gap-3 px-6 pt-2 pb-0">
       <button id="logout-btn" class="px-5 py-2 border-2 border-red-300 text-red-500 rounded-lg hover:bg-red-50 transition-colors font-medium text-sm">
         ✕ End session
       </button>
@@ -494,9 +486,9 @@ function renderMenu(el) {
     </div>
 
     <!-- Scrollable content -->
-    <div class="flex-1 overflow-y-auto scroll-hide px-8 pt-6 pb-4">
+    <div class="flex-1 overflow-y-auto scroll-hide px-6 pt-2 pb-2">
       <!-- Recommended -->
-      <h2 class="text-2xl mb-4">Recommended for you</h2>
+      <h2 class="text-xl mb-2">Recommended for you</h2>
       <div class="flex gap-4 overflow-x-auto scroll-hide pb-4" id="rec-row">
         ${recs.map((d,i) => menuCardHTML(d, i, true)).join('')}
         <div class="flex items-center justify-center min-w-[60px] flex-shrink-0">
@@ -505,7 +497,7 @@ function renderMenu(el) {
       </div>
 
       <!-- Safe picks -->
-      <h2 class="text-2xl mb-4 mt-2">Safe picks for you</h2>
+      <h2 class="text-xl mb-2 mt-1">Safe picks for you</h2>
       <div class="flex gap-4 overflow-x-auto scroll-hide pb-4" id="safe-row">
         ${safeMain.map((d,i) => menuCardHTML(d, i+100, true)).join('')}
         <div class="flex items-center justify-center min-w-[60px] flex-shrink-0">
@@ -572,14 +564,14 @@ function renderFullMenu(el) {
   el.innerHTML = `
   <div class="w-full h-full flex flex-col bg-[#F5F0E8]">
     <!-- Header -->
-    <div class="flex items-center justify-between px-8 pt-8 pb-0">
+    <div class="flex items-center justify-between px-6 pt-3 pb-0">
       <div class="flex items-center gap-2">
         <h1 class="text-3xl">Hi ${sess?.user?.name||''}</h1>
         <span class="text-3xl">👋</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-5xl">🐙</span>
-        <span class="text-4xl font-bold tracking-tight">KHIJO</span>
+        <span style="font-size:2rem">🐙</span>
+        <span style="font-size:1.75rem;font-weight:700">KHIJO</span>
       </div>
     </div>
 
@@ -595,14 +587,14 @@ function renderFullMenu(el) {
     </div>
 
     <!-- Category tabs -->
-    <div class="flex gap-1 px-8 pt-4 pb-0 overflow-x-auto scroll-hide flex-shrink-0">
+    <div class="flex gap-1 px-4 pt-2 pb-0 overflow-x-auto scroll-hide flex-shrink-0">
       ${cats.map(c=>`
         <button class="cat-tab flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${c===cat?'bg-gray-900 text-white':'bg-[#EDE5D8] text-gray-800 hover:bg-[#E0D8CC]'}" data-cat="${c}">${c}</button>
       `).join('')}
     </div>
 
     <!-- Grid of dishes -->
-    <div class="flex-1 overflow-y-auto scroll-hide p-8 pt-4">
+    <div class="flex-1 overflow-y-auto scroll-hide p-4 pt-2">
       <div class="grid grid-cols-4 gap-6">
         ${dishes.map((d,i) => {
           const safe = safeSet.has(d.name);
@@ -981,8 +973,8 @@ function renderOrderPlaced(el) {
         <span class="text-3xl">👋</span>
       </div>
       <div class="flex items-center gap-2">
-        <span class="text-5xl">🐙</span>
-        <span class="text-4xl font-bold tracking-tight">KHIJO</span>
+        <span style="font-size:2rem">🐙</span>
+        <span style="font-size:1.75rem;font-weight:700">KHIJO</span>
       </div>
     </div>
 

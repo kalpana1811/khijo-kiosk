@@ -33,6 +33,10 @@
   /* Hide scrollbar but keep scrolling */
   .scroll-hide::-webkit-scrollbar { display: none; }
   .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  * { -webkit-overflow-scrolling: touch; }
+  .overflow-y-auto { overflow-y: auto !important; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+  .overflow-x-auto { overflow-x: auto !important; -webkit-overflow-scrolling: touch; touch-action: pan-x; }
+  #app { touch-action: pan-y; }
   .scroll-hide { touch-action: pan-x pan-y; -webkit-overflow-scrolling: touch; }
   .overflow-y-auto, .overflow-x-auto { -webkit-overflow-scrolling: touch; touch-action: pan-x pan-y; }
 
@@ -1098,6 +1102,14 @@ async function boot() {
 }
 
 boot();
+
+// Force touch scrolling on all scroll containers
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.overflow-y-auto, .overflow-x-auto, .scroll-hide').forEach(el => {
+    el.style.webkitOverflowScrolling = 'touch';
+    el.style.touchAction = el.classList.contains('overflow-x-auto') ? 'pan-x' : 'pan-y';
+  });
+});
 </script>
 </body>
 </html>

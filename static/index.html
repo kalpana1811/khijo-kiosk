@@ -70,6 +70,136 @@
 <div id="app"></div>
 
 <script>
+// ─── Dish Photos ──────────────────────────────────────────────────────────
+const DISH_PHOTOS = {
+  // Sets
+  "Spicy Beef Ramen + Spicy Marinated Beef Buns":       "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop&q=100",
+  "Spicy Beef Ramen + Tea Egg + Random Drink":           "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop&q=100",
+  "Grilled Chicken Teriyaki + 2 Veg Gyoza + Random Drink": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop&q=100",
+  "Chilli Chicken + Tea Egg + Random Drink":             "https://images.unsplash.com/photo-1598103442097-8b74394b95c3?w=400&h=300&fit=crop&q=100",
+  "Beef Curry + 2 Veg Gyoza + Random Drink":             "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop&q=100",
+  "Braised Pork Momo + Braised Egg + Random Drink":      "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
+  "Spicy Pork Ball Ramen + Braised Egg + Random Drink":  "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=400&h=300&fit=crop&q=100",
+
+  // Noodle Soup
+  "Tofu Katsu Noodle Soup":          "https://images.unsplash.com/photo-1555126634-323283e090fa?w=400&h=300&fit=crop&q=100",
+  "Chilli Chicken Udon":             "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop&q=100",
+  "Halal Chicken Katsu Noodle Soup": "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=400&h=300&fit=crop&q=100",
+  "Chilli Chicken Ramen":            "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop&q=100",
+  "Spicy Pork Rib Udon":             "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=400&h=300&fit=crop&q=100",
+  "Spicy Pork Rib Ramen":            "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=400&h=300&fit=crop&q=100",
+  "Halal Chicken Udon":              "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=400&h=300&fit=crop&q=100",
+  "Halal Chicken Ramen":             "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=400&h=300&fit=crop&q=100",
+  "Beef Sliced Noodle Soup":         "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop&q=100",
+  "Chicken Gyoza Noodle Soup":       "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop&q=100",
+  "Vegetable Gyoza Noodle Soup":     "https://images.unsplash.com/photo-1555126634-323283e090fa?w=400&h=300&fit=crop&q=100",
+  "Pork Meatball Noodle Soup":       "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=400&h=300&fit=crop&q=100",
+  "Braised Pork Belly Noodle Soup":  "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
+  "Braised Pork Rib Noodle Soup":    "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
+  "Prawn Katsu Noodle Soup":         "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop&q=100",
+  "Chicken Katsu Noodle Soup":       "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=400&h=300&fit=crop&q=100",
+  "Spicy Pork Belly Udon":           "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=400&h=300&fit=crop&q=100",
+  "Spicy Pork Belly Ramen":          "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=400&h=300&fit=crop&q=100",
+  "Spicy Beef Udon":                 "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop&q=100",
+  "Spicy Beef Ramen":                "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&h=300&fit=crop&q=100",
+
+  // Yakisoba
+  "Veg Gyoza Yakisoba":          "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=100",
+  "Pumpkin Yakisoba":            "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=100",
+  "Halal Chicken Yakisoba":      "https://images.unsplash.com/photo-1598103442097-8b74394b95c3?w=400&h=300&fit=crop&q=100",
+  "Chilli Chicken Yakisoba":     "https://images.unsplash.com/photo-1598103442097-8b74394b95c3?w=400&h=300&fit=crop&q=100",
+  "Pork Meatball Yakisoba":      "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=100",
+  "Seafood Tempura Yakisoba":    "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop&q=100",
+  "Veg Tempura Yakisoba":        "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=100",
+  "Prawn Katsu Yakisoba":        "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop&q=100",
+  "Chicken Gyoza Yakisoba":      "https://images.unsplash.com/photo-1598103442097-8b74394b95c3?w=400&h=300&fit=crop&q=100",
+  "Tofu Katsu Yakisoba":         "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=100",
+  "Beef Sliced Yakisoba":        "https://images.unsplash.com/photo-1547592180-85f173990554?w=400&h=300&fit=crop&q=100",
+  "Grilled Chicken Yakisoba":    "https://images.unsplash.com/photo-1598103442097-8b74394b95c3?w=400&h=300&fit=crop&q=100",
+  "Chicken Katsu Yakisoba":      "https://images.unsplash.com/photo-1598103442097-8b74394b95c3?w=400&h=300&fit=crop&q=100",
+
+  // Japanese Rice Bowl
+  "Beef Slice Halal Rice":           "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop&q=100",
+  "Veg Tempura Teriyaki Rice":       "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop&q=100",
+  "Pumpkin Teriyaki Rice":           "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop&q=100",
+  "Seafood Tempura Teriyaki Rice":   "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop&q=100",
+  "Salmon Katsu Teriyaki Rice":      "https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=400&h=300&fit=crop&q=100",
+  "Takoyaki Curry Rice":             "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop&q=100",
+  "Chilli Chicken Halal Rice":       "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop&q=100",
+  "Beef Slice Teriyaki Rice":        "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop&q=100",
+  "Pork Meatball Teriyaki Rice":     "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop&q=100",
+  "Chicken Katsu Curry Rice":        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop&q=100",
+  "Tofu Katsu Curry Rice":           "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop&q=100",
+  "Chicken Gyoza Curry Rice":        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop&q=100",
+  "Tofu Teriyaki Rice":              "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop&q=100",
+  "Veg Tempura Curry Rice":          "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop&q=100",
+  "Prawn Katsu Curry Rice":          "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop&q=100",
+  "Pork Meatball Curry Rice":        "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
+  "Pumpkin Curry Rice":              "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop&q=100",
+  "Veg Gyoza Curry Rice":            "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=400&h=300&fit=crop&q=100",
+  "Beef Curry Rice":                 "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop&q=100",
+  "Seafood Tempura Curry Rice":      "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop&q=100",
+  "Salmon Katsu Curry Rice":         "https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=400&h=300&fit=crop&q=100",
+  "Grilled Unagi Eel Rice":          "https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=400&h=300&fit=crop&q=100",
+  "Grilled Chicken Teriyaki Rice":   "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop&q=100",
+  "Halal Chicken Katsu Curry Rice":  "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop&q=100",
+
+  // Momo Buns
+  "Japanese Sausage Momo":   "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
+  "Spicy Beef Momo":         "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
+  "Pork Belly Momo":         "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
+  "Prawn Katsu Momo":        "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop&q=100",
+  "Chicken Katsu Halal Momo":"https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
+  "Tofu Katsu Momo":         "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
+
+  // Hotpot
+  "Hotpot Without Soup": "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop&q=100",
+  "Hotpot With Soup":    "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop&q=100",
+
+  // Sides
+  "Glutinous Rice Cake":    "https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=400&h=300&fit=crop&q=100",
+  "Japanese Fried Chicken": "https://images.unsplash.com/photo-1562802378-063ec186a863?w=400&h=300&fit=crop&q=100",
+  "Spicy Chicken Wings":    "https://images.unsplash.com/photo-1562802378-063ec186a863?w=400&h=300&fit=crop&q=100",
+  "Apple Gyoza":            "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=300&fit=crop&q=100",
+  "Tea Egg":                "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=400&h=300&fit=crop&q=100",
+  "Spring Rolls":           "https://images.unsplash.com/photo-1515669097368-22e68427d265?w=400&h=300&fit=crop&q=100",
+  "Takoyaki":               "https://images.unsplash.com/photo-1617196034099-5b30d5880a63?w=400&h=300&fit=crop&q=100",
+  "Vegetable Gyoza":        "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=300&fit=crop&q=100",
+  "Chicken Gyoza":          "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=300&fit=crop&q=100",
+  "Braised Egg":            "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=400&h=300&fit=crop&q=100",
+
+  // Drinks
+  "Green Tea 500ml":              "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop&q=100",
+  "Still Water 500ml":            "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400&h=300&fit=crop&q=100",
+  "Coke 330ml":                   "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&h=300&fit=crop&q=100",
+  "Ice Tea 500ml":                "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop&q=100",
+  "Aloe Vera Drink 500ml":        "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop&q=100",
+  "San Pellegrino Orange 330ml":  "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&h=300&fit=crop&q=100",
+  "San Pellegrino Lemon 330ml":   "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&h=300&fit=crop&q=100",
+  "Diet Coke 330ml":              "https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400&h=300&fit=crop&q=100",
+};
+
+// ─── Category Fallback Photos ────────────────────────────────────────────────
+const CATEGORY_PHOTOS = {
+  "Noodle Soup":        "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=400&h=300&fit=crop&q=100",
+  "Yakisoba":           "https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=400&h=300&fit=crop&q=100",
+  "Japanese Rice Bowl": "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop&q=100",
+  "Sets":               "https://images.unsplash.com/photo-1553621042-f6e147245754?w=400&h=300&fit=crop&q=100",
+  "Momo Buns":          "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=300&fit=crop&q=100",
+  "Hotpot":             "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
+  "Sides":              "https://images.unsplash.com/photo-1529563021893-cc83c992d75d?w=400&h=300&fit=crop&q=100",
+  "Drinks":             "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop&q=100",
+};
+
+// Inject Unsplash images into any list of dish objects
+function applyImages(dishes) {
+  if (!dishes) return dishes;
+  return dishes.map(d => ({
+    ...d,
+    image: DISH_PHOTOS[d.name] || d.image || CATEGORY_PHOTOS[d.category] || ''
+  }));
+}
+
 // ─── State ────────────────────────────────────────────────────────────────
 const state = {
   screen: 'welcome',   // welcome | greeting | menu | fullmenu | cart | orderPlaced
@@ -84,7 +214,15 @@ const state = {
 async function fetchSession(uid=null) {
   const url = uid ? `/api/session/${uid}` : '/api/session';
   const r = await fetch(url);
-  return r.json();
+  const sess = await r.json();
+  if (sess && sess.status === 'ok') {
+    sess.recommendations = applyImages(sess.recommendations);
+    sess.safe_menu       = applyImages(sess.safe_menu);
+    sess.all_menu        = applyImages(sess.all_menu);
+    if (sess.surprise)    sess.surprise   = { ...sess.surprise,   image: DISH_PHOTOS[sess.surprise.name]   || CATEGORY_PHOTOS[sess.surprise.category]   || sess.surprise.image   || '' };
+    if (sess.last_order)  sess.last_order = { ...sess.last_order, image: DISH_PHOTOS[sess.last_order.name] || CATEGORY_PHOTOS[sess.last_order.category] || sess.last_order.image || '' };
+  }
+  return sess;
 }
 
 // ─── Cart helpers ─────────────────────────────────────────────────────────
@@ -260,10 +398,11 @@ function menuCardHTML(dish, idx, safe=true) {
   const price = dish.price.toFixed(2);
   const cat = dish.category || '';
 
-  // Fallback gradient when no image
+  // Fallback: category photo → gradient
   const fallbackStyle = `background: linear-gradient(135deg, ${catColor(cat)} 0%, ${catColorDark(cat)} 100%);`;
-  const imgHTML = img
-    ? `<img src="${img}" alt="${name}" class="w-full h-full object-cover" onerror="this.parentElement.style='${fallbackStyle} display:flex; align-items:center; justify-content:center;'; this.outerHTML='<span style=\\'font-size:3rem\\'>${catEmoji(cat)}</span>'">`
+  const resolvedImg = img || CATEGORY_PHOTOS[cat] || '';
+  const imgHTML = resolvedImg
+    ? `<img src="${resolvedImg}" alt="${name}" class="w-full h-full object-cover" onerror="this.parentElement.style='${fallbackStyle} display:flex; align-items:center; justify-content:center;'; this.outerHTML='<span style=\\'font-size:3rem\\'>${catEmoji(cat)}</span>'">`
     : `<div style="${fallbackStyle}" class="w-full h-full flex items-center justify-center"><span style="font-size:3rem">${catEmoji(cat)}</span></div>`;
 
   const addBtn = safe
@@ -292,8 +431,9 @@ function fullMenuCardHTML(dish, idx, safe, reasons) {
   const price = dish.price.toFixed(2);
   const cat  = dish.category || '';
   const fallbackStyle = `background: linear-gradient(135deg, ${catColor(cat)} 0%, ${catColorDark(cat)} 100%);`;
-  const imgHTML = img
-    ? `<img src="${img}" alt="${name}" class="w-full h-full object-cover">`
+  const resolvedImg2 = img || CATEGORY_PHOTOS[cat] || '';
+  const imgHTML = resolvedImg2
+    ? `<img src="${resolvedImg2}" alt="${name}" class="w-full h-full object-cover" onerror="this.parentElement.style.background='${catColor(cat)}'; this.remove();">`
     : `<div style="${fallbackStyle}" class="w-full h-full flex items-center justify-center"><span style="font-size:2.5rem">${catEmoji(cat)}</span></div>`;
 
   return `

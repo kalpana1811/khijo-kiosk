@@ -24,6 +24,7 @@
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #F5F0E8; }
   * { box-sizing: border-box; }
   #app { width: 1024px; height: 600px; margin: 0 auto; background: #F5F0E8; overflow: hidden; position: relative; }
+  .screen-scroll { width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
   .overflow-y-auto, .overflow-x-auto { -webkit-overflow-scrolling: touch; touch-action: pan-y; }
   .overflow-x-auto { touch-action: pan-x; }
 
@@ -487,7 +488,7 @@ function renderMenu(el) {
     </div>
 
     <!-- Scrollable content -->
-    <div class="flex-1 overflow-y-auto scroll-hide px-6 pt-2 pb-2">
+    <div style="flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;" class="scroll-hide px-6 pt-2 pb-2">
       <!-- Recommended -->
       <h2 class="text-xl mb-2">Recommended for you</h2>
       <div class="flex gap-4 overflow-x-auto scroll-hide pb-4" id="rec-row">
@@ -595,7 +596,7 @@ function renderFullMenu(el) {
     </div>
 
     <!-- Grid of dishes -->
-    <div class="flex-1 overflow-y-auto scroll-hide p-4 pt-2">
+    <div style="flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;" class="scroll-hide p-4 pt-2">
       <div class="grid grid-cols-4 gap-6">
         ${dishes.map((d,i) => {
           const safe = safeSet.has(d.name);
@@ -705,7 +706,7 @@ function renderCart(el) {
       <h2 class="text-3xl mb-6">Your cart</h2>
 
       <!-- Items -->
-      <div class="flex-1 overflow-y-auto scroll-hide space-y-4 pb-6">
+      <div style="flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;" class="scroll-hide space-y-4 pb-6">
         ${itemsHTML}
       </div>
 
@@ -1098,42 +1099,26 @@ async function boot() {
 boot();
 
 function initScroll() {
-  // ── Horizontal drag scroll (food card rows) ──
-  document.querySelectorAll('.overflow-x-auto').forEach(el => {
-    let startX = 0, startScroll = 0, dragging = false;
-
-    el.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-      startScroll = el.scrollLeft;
-      dragging = true;
-    }, {passive: true});
-
-    el.addEventListener('touchmove', e => {
-      if (!dragging) return;
-      const dx = startX - e.touches[0].clientX;
-      el.scrollLeft = startScroll + dx;
-    }, {passive: true});
-
-    el.addEventListener('touchend', () => { dragging = false; }, {passive: true});
-  });
-
-  // ── Vertical touch scroll (main content area) ──
-  document.querySelectorAll('.overflow-y-auto').forEach(el => {
-    let startY = 0, startScroll = 0, dragging = false;
-
+  document.querySelectorAll('[style*="overflow-y:auto"]').forEach(el => {
+    let startY, startTop;
     el.addEventListener('touchstart', e => {
       startY = e.touches[0].clientY;
-      startScroll = el.scrollTop;
-      dragging = true;
+      startTop = el.scrollTop;
     }, {passive: true});
-
     el.addEventListener('touchmove', e => {
-      if (!dragging) return;
-      const dy = startY - e.touches[0].clientY;
-      el.scrollTop = startScroll + dy;
+      el.scrollTop = startTop + (startY - e.touches[0].clientY);
     }, {passive: true});
+  });
 
-    el.addEventListener('touchend', () => { dragging = false; }, {passive: true});
+  document.querySelectorAll('.overflow-x-auto').forEach(el => {
+    let startX, startLeft;
+    el.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      startLeft = el.scrollLeft;
+    }, {passive: true});
+    el.addEventListener('touchmove', e => {
+      el.scrollLeft = startLeft + (startX - e.touches[0].clientX);
+    }, {passive: true});
   });
 }
 </script>

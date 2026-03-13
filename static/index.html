@@ -456,7 +456,7 @@ function renderMenu(el) {
   const sess = state.session;
   const recs = sess?.recommendations || [];
   const safe = sess?.safe_menu || [];
-  const safeMain = safe.filter(d => d.category !== 'Drinks').slice(0, 8);
+  const safeMain = safe.filter(d => d.category !== 'Drinks');
   const cnt = cartCount();
 
   el.innerHTML = `

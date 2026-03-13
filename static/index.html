@@ -408,11 +408,11 @@ function menuCardHTML(dish, idx, safe=true) {
     : `<span class="text-xs text-red-600 font-medium">⚠ Not safe</span>`;
 
   return `
-  <div class="menu-card min-w-[170px] bg-[#EDE5D8] rounded-2xl overflow-hidden shadow-md flex flex-col flex-shrink-0 cursor-pointer">
-    <div class="h-24 overflow-hidden flex-shrink-0">
+  <div class="menu-card min-w-[185px] bg-[#EDE5D8] rounded-2xl overflow-hidden shadow-md flex flex-col flex-shrink-0 cursor-pointer">
+    <div class="h-28 overflow-hidden flex-shrink-0">
       ${imgHTML}
     </div>
-    <div class="p-2 flex flex-col gap-1 flex-1">
+    <div class="p-3 flex flex-col gap-1 flex-1" style="min-width:185px">
       <h3 class="text-base font-medium leading-tight">${name}</h3>
       <div class="flex items-center justify-between mt-auto">
         <span class="text-lg">£${price}</span>
@@ -436,10 +436,10 @@ function fullMenuCardHTML(dish, idx, safe, reasons) {
 
   return `
   <div class="menu-card bg-[#EDE5D8] rounded-2xl overflow-hidden shadow-md flex flex-col cursor-pointer">
-    <div class="h-28 overflow-hidden flex-shrink-0 relative">
+    <div class="h-28 overflow-hidden flex-shrink-0 relative" style="min-width:185px">
       ${imgHTML}
     </div>
-    <div class="p-3 flex flex-col gap-1 flex-1">
+    <div class="p-3 flex flex-col gap-1 flex-1" style="min-width:185px">
       <h3 class="text-sm font-medium leading-tight">${name}</h3>
       ${!safe ? `<p class="text-xs text-red-600 font-medium">⚠ ${reasons}</p>` : ''}
       <div class="flex items-center justify-between mt-auto pt-1">
@@ -1136,9 +1136,9 @@ function initScroll() {
 
     el.addEventListener('pointermove', e => {
       if (!isDragging) return;
-      const dx = startX - e.clientX;
+      const dx = e.clientX - startX;
       if (Math.abs(dx) > 5) {
-        el.scrollLeft = startLeft + dx;
+        el.scrollLeft = startLeft - dx;
         e.preventDefault();
       }
     });

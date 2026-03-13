@@ -2,10 +2,10 @@
   "1047571399431": {
     "name": "Alex Carter",
     "age": 20,
-    "allergies": [
+    "allergies": [],
+    "avoid": [
       "eggs"
     ],
-    "avoid": [],
     "dietary_preferences": [
       "vegetarian"
     ],
@@ -13,45 +13,42 @@
       "Tofu Katsu Noodle Soup",
       "Pumpkin Yakisoba",
       "Veg Gyoza Curry Rice",
-      "Tofu Katsu Curry Rice",
-      "Vegetable Gyoza Noodle Soup",
       "Pumpkin Teriyaki Rice",
       "Veg Tempura Yakisoba",
-      "Tofu Katsu Noodle Soup",
-      "Veg Gyoza Yakisoba",
-      "Pumpkin Curry Rice"
+      "Vegetable Gyoza Noodle Soup",
+      "Tofu Teriyaki Rice",
+      "Pumpkin Curry Rice",
+      "Veg Tempura Teriyaki Rice",
+      "Tofu Katsu Yakisoba"
     ]
   },
   "584188161585": {
-    "name": "Nicholas Smith",
+    "name": "Garry",
     "age": 22,
-    "allergies": [
-      "peanuts",
-      "soy"
-    ],
+    "allergies": [],
     "avoid": [
-      "pork"
+      "chicken"
     ],
-    "dietary_preferences": [
-      "gluten-free"
-    ],
+    "dietary_preferences": [],
     "order_history": [
-      "Grilled Chicken Teriyaki Rice",
-      "Beef Sliced Yakisoba",
-      "Chilli Chicken Udon",
+      "Spicy Beef Ramen",
+      "Braised Pork Belly Noodle Soup",
       "Beef Slice Teriyaki Rice",
-      "Chicken Katsu Noodle Soup",
-      "Grilled Chicken Yakisoba",
+      "Pork Meatball Yakisoba",
+      "Spicy Beef Udon",
       "Beef Curry Rice",
-      "Chilli Chicken Yakisoba",
-      "Chicken Gyoza Noodle Soup",
-      "Grilled Chicken Teriyaki Rice"
+      "Braised Pork Rib Noodle Soup",
+      "Beef Sliced Yakisoba",
+      "Spicy Pork Belly Ramen",
+      "Beef Slice Teriyaki Rice"
     ]
   },
   "584196495686": {
     "name": "Sara Malik",
     "age": 21,
-    "allergies": [],
+    "allergies": [
+      "peanuts"
+    ],
     "avoid": [],
     "dietary_preferences": [
       "halal"
@@ -59,14 +56,14 @@
     "order_history": [
       "Halal Chicken Katsu Noodle Soup",
       "Beef Slice Halal Rice",
-      "Grilled Chicken Teriyaki Rice",
-      "Halal Chicken Katsu Curry Rice",
-      "Chilli Chicken + Tea Egg + Random Drink",
       "Halal Chicken Yakisoba",
+      "Halal Chicken Katsu Curry Rice",
       "Beef Slice Teriyaki Rice",
       "Halal Chicken Udon",
-      "Beef Slice Halal Rice",
-      "Halal Chicken Katsu Noodle Soup"
+      "Chilli Chicken Halal Rice",
+      "Beef Sliced Noodle Soup",
+      "Halal Chicken Ramen",
+      "Beef Slice Halal Rice"
     ]
   },
   "100004": {

@@ -1093,38 +1093,51 @@ async function boot() {
 boot();
 
 function initScroll() {
-  // Vertical scroll - pointer events
-  document.querySelectorAll('#menu-scroll').forEach(el => {
-    let active = false, startY = 0, startTop = 0;
+  function addDragScroll(el, axis) {
+    let active = false, startPos = 0, startScroll = 0, lastPos = 0, velocity = 0, lastTime = 0, rafId = null;
+
     el.addEventListener('pointerdown', e => {
       if (e.target.closest('button')) return;
       active = true;
-      startY = e.clientY;
-      startTop = el.scrollTop;
+      startPos = axis === 'y' ? e.clientY : e.clientX;
+      startScroll = axis === 'y' ? el.scrollTop : el.scrollLeft;
+      lastPos = startPos;
+      velocity = 0;
+      if (rafId) cancelAnimationFrame(rafId);
       el.setPointerCapture(e.pointerId);
     });
+
     el.addEventListener('pointermove', e => {
       if (!active) return;
-      el.scrollTop = startTop + (startY - e.clientY);
+      const pos = axis === 'y' ? e.clientY : e.clientX;
+      const now = Date.now();
+      velocity = (lastPos - pos) / Math.max(1, now - lastTime);
+      lastPos = pos;
+      lastTime = now;
+      const delta = startPos - pos;
+      if (axis === 'y') el.scrollTop = startScroll + delta;
+      else el.scrollLeft = startScroll + delta;
     });
-    el.addEventListener('pointerup', () => { active = false; });
-    el.addEventListener('pointercancel', () => { active = false; });
-  });
 
-  // Horizontal scroll - use native touch only, no pointer capture
-  document.querySelectorAll('.overflow-x-auto').forEach(el => {
-    let startX = 0, startLeft = 0, active = false;
-    el.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-      startLeft = el.scrollLeft;
-      active = true;
-    }, {passive: true});
-    el.addEventListener('touchmove', e => {
-      if (!active) return;
-      el.scrollLeft = startLeft + (startX - e.touches[0].clientX);
-    }, {passive: true});
-    el.addEventListener('touchend', () => { active = false; }, {passive: true});
-  });
+    el.addEventListener('pointerup', () => {
+      active = false;
+      // momentum
+      let v = velocity;
+      function momentum() {
+        if (Math.abs(v) < 0.1) return;
+        if (axis === 'y') el.scrollTop += v * 16;
+        else el.scrollLeft += v * 16;
+        v *= 0.92;
+        rafId = requestAnimationFrame(momentum);
+      }
+      momentum();
+    });
+
+    el.addEventListener('pointercancel', () => { active = false; });
+  }
+
+  document.querySelectorAll('#menu-scroll').forEach(el => addDragScroll(el, 'y'));
+  document.querySelectorAll('.overflow-x-auto').forEach(el => addDragScroll(el, 'x'));
 }
 </script>
 </body>

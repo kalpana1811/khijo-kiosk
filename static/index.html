@@ -191,7 +191,7 @@ const CATEGORY_PHOTOS = {
   "Noodle Soup":        "https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=400&h=300&fit=crop&q=100",
   "Yakisoba":           "https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=400&h=300&fit=crop&q=100",
   "Japanese Rice Bowl": "https://images.unsplash.com/photo-1574484284002-952d92456975?w=400&h=300&fit=crop&q=100",
-  "Sets":               "https://images.unsplash.com/photo-1553621042-f6e147245754?w=400&h=300&fit=crop&q=100",
+  :               "https://images.unsplash.com/photo-1553621042-f6e147245754?w=400&h=300&fit=crop&q=100",
   "Momo Buns":          "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=400&h=300&fit=crop&q=100",
   "Hotpot":             "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop&q=100",
   "Sides":              "https://images.unsplash.com/photo-1529563021893-cc83c992d75d?w=400&h=300&fit=crop&q=100",
@@ -454,9 +454,9 @@ function fullMenuCardHTML(dish, idx, safe, reasons) {
 function renderMenu(el) {
   try {
   const sess = state.session;
-  const recs = sess?.recommendations || [];
+  const recs = (sess?.recommendations || []).filter(d => d.category !== 'Sets');
   const safe = sess?.safe_menu || [];
-  const safeMain = safe.filter(d => d.category !== 'Drinks');
+  const safeMain = safe.filter(d => d.category !== 'Drinks' && d.category !== 'Sets');
   const cnt = cartCount();
 
   el.innerHTML = `
@@ -1016,16 +1016,16 @@ function renderOrderPlaced(el) {
 // ─── Category helpers ─────────────────────────────────────────────────────
 function catColor(cat) {
   const m = {"Noodle Soup":"#C8785A","Yakisoba":"#8A6A3A","Japanese Rice Bowl":"#5A7A4A",
-             "Sets":"#3A5A7A","Momo Buns":"#8A4A6A","Hotpot":"#A03020","Sides":"#4A7A5A","Drinks":"#3A6A5A"};
+             :"#3A5A7A","Momo Buns":"#8A4A6A","Hotpot":"#A03020","Sides":"#4A7A5A","Drinks":"#3A6A5A"};
   return m[cat] || "#9A7A6A";
 }
 function catColorDark(cat) {
   const m = {"Noodle Soup":"#A05A3A","Yakisoba":"#6A4A1A","Japanese Rice Bowl":"#3A5A2A",
-             "Sets":"#1A3A5A","Momo Buns":"#6A2A4A","Hotpot":"#801010","Sides":"#2A5A3A","Drinks":"#1A4A3A"};
+             :"#1A3A5A","Momo Buns":"#6A2A4A","Hotpot":"#801010","Sides":"#2A5A3A","Drinks":"#1A4A3A"};
   return m[cat] || "#7A5A4A";
 }
 function catEmoji(cat) {
-  const m = {"Noodle Soup":"🍜","Yakisoba":"🍝","Japanese Rice Bowl":"🍱","Sets":"🥢",
+  const m = {"Noodle Soup":"🍜","Yakisoba":"🍝","Japanese Rice Bowl":"🍱",:"🥢",
              "Momo Buns":"🥟","Hotpot":"🫕","Sides":"🥗","Drinks":"🍵"};
   return m[cat] || "🍽";
 }

@@ -13,7 +13,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'index.html')
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='utf-8') as f:
         return f.read(), 200, {'Content-Type': 'text/html'}
 
 @app.route('/api/session')

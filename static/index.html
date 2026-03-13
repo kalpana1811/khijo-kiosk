@@ -20,7 +20,6 @@
 </script>
 <style>
   * { box-sizing: border-box; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-  input, textarea { -webkit-user-select: text; user-select: text; }
   body { margin: 0; padding: 0; background: #F5F0E8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #F5F0E8; }
   * { box-sizing: border-box; }
@@ -261,6 +260,7 @@ function render() {
   else if (state.screen === 'orderPlaced') renderOrderPlaced(screen);
 
   app.appendChild(screen);
+  setTimeout(initDragScroll, 50);
 }
 
 // ─── WELCOME SCREEN ───────────────────────────────────────────────────────
@@ -1097,26 +1097,46 @@ async function boot() {
 
 boot();
 
-// Touch scroll fix - prevent default only when NOT on a scroll container
-document.addEventListener('touchstart', function(e) {
-  const el = e.target.closest('.overflow-y-auto, .overflow-x-auto, .scroll-hide');
-  if (el) {
-    el._touchStartX = e.touches[0].clientX;
-    el._touchStartY = e.touches[0].clientY;
-  }
-}, {passive: true});
+// Drag-anywhere scroll for horizontal rows
+function initDragScroll() {
+  document.querySelectorAll('.overflow-x-auto').forEach(el => {
+    let isDown = false, startX, scrollLeft;
+    el.addEventListener('mousedown', e => {
+      isDown = true; el.style.cursor = 'grabbing';
+      startX = e.pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+    });
+    el.addEventListener('mouseleave', () => { isDown = false; el.style.cursor = 'grab'; });
+    el.addEventListener('mouseup', () => { isDown = false; el.style.cursor = 'grab'; });
+    el.addEventListener('mousemove', e => {
+      if (!isDown) return;
+      e.preventDefault();
+      el.scrollLeft = scrollLeft - (e.pageX - el.offsetLeft - startX);
+    });
+    // Touch
+    let touchStartX, touchScrollLeft;
+    el.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].pageX;
+      touchScrollLeft = el.scrollLeft;
+    }, {passive: true});
+    el.addEventListener('touchmove', e => {
+      const dx = touchStartX - e.touches[0].pageX;
+      el.scrollLeft = touchScrollLeft + dx;
+    }, {passive: true});
+    el.style.cursor = 'grab';
+    el.style.overflow = 'hidden'; // hide scrollbar, use drag instead
+  });
+}
 
-document.addEventListener('touchmove', function(e) {
-  const el = e.target.closest('.overflow-y-auto, .overflow-x-auto, .scroll-hide');
-  if (!el) {
-    e.preventDefault(); // block scroll on non-scrollable areas
-    return;
-  }
-  const dx = Math.abs(e.touches[0].clientX - (el._touchStartX || 0));
-  const dy = Math.abs(e.touches[0].clientY - (el._touchStartY || 0));
-  const isHoriz = el.classList.contains('overflow-x-auto');
-  if (isHoriz && dx < dy) e.preventDefault(); // block vertical on horizontal scroller
-}, {passive: false});
+// Vertical touch scroll for main content
+document.addEventListener('touchstart', e => {
+  const el = e.target.closest('.overflow-y-auto');
+  if (el) { el._ty = e.touches[0].clientY; el._ts = el.scrollTop; }
+}, {passive: true});
+document.addEventListener('touchmove', e => {
+  const el = e.target.closest('.overflow-y-auto');
+  if (el) { el.scrollTop = el._ts + (el._ty - e.touches[0].clientY); }
+}, {passive: true});
 </script>
 </body>
 </html>

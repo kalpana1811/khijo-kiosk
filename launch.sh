@@ -14,4 +14,10 @@ DISPLAY=:0 chromium-browser \
   --disable-infobars \
   --disable-translate \
   --no-first-run \
-  http://localhost:8080
+  --disable-features=TranslateUI \
+  --overscroll-history-navigation=0 \
+  --disable-touch-adjustment \
+  --enable-viewport \
+  --touch-devices=1 \
+  --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' \
+  http://localhost:5001

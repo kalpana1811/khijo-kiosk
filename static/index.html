@@ -19,12 +19,11 @@
   }
 </script>
 <style>
-  * { box-sizing: border-box; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  * { box-sizing: border-box; -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important; pointer-events: auto; }
   body { margin: 0; padding: 0; background: #F5F0E8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #F5F0E8; }
   * { box-sizing: border-box; }
   #app { width: 1024px; height: 600px; margin: 0 auto; background: #F5F0E8; overflow: hidden; position: relative; }
-  .screen-scroll { width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
   .overflow-y-auto, .overflow-x-auto { -webkit-overflow-scrolling: touch; touch-action: pan-y; }
   .overflow-x-auto { touch-action: pan-x; }
 
@@ -36,6 +35,8 @@
 
   /* Card hover */
   .menu-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
+  p, h1, h2, h3, span, div { -webkit-user-select: none; user-select: none; }
   .menu-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
 
   /* Button transitions */
@@ -488,7 +489,7 @@ function renderMenu(el) {
     </div>
 
     <!-- Scrollable content -->
-    <div style="flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;" class="scroll-hide px-6 pt-2 pb-2">
+    <div style="flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;touch-action:pan-y;" class="scroll-hide px-6 pt-2 pb-2" id="menu-scroll">
       <!-- Recommended -->
       <h2 class="text-xl mb-2">Recommended for you</h2>
       <div class="flex gap-4 overflow-x-auto scroll-hide pb-4" id="rec-row">
@@ -596,7 +597,7 @@ function renderFullMenu(el) {
     </div>
 
     <!-- Grid of dishes -->
-    <div style="flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;" class="scroll-hide p-4 pt-2">
+    <div style="flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;touch-action:pan-y;" class="scroll-hide p-4 pt-2" id="menu-scroll">
       <div class="grid grid-cols-4 gap-6">
         ${dishes.map((d,i) => {
           const safe = safeSet.has(d.name);
@@ -706,7 +707,7 @@ function renderCart(el) {
       <h2 class="text-3xl mb-6">Your cart</h2>
 
       <!-- Items -->
-      <div style="flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;" class="scroll-hide space-y-4 pb-6">
+      <div style="flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;touch-action:pan-y;" class="scroll-hide space-y-4 pb-6" id="menu-scroll">
         ${itemsHTML}
       </div>
 
@@ -1099,26 +1100,49 @@ async function boot() {
 boot();
 
 function initScroll() {
-  document.querySelectorAll('[style*="overflow-y:auto"]').forEach(el => {
-    let startY, startTop;
-    el.addEventListener('touchstart', e => {
-      startY = e.touches[0].clientY;
-      startTop = el.scrollTop;
-    }, {passive: true});
-    el.addEventListener('touchmove', e => {
-      el.scrollTop = startTop + (startY - e.touches[0].clientY);
-    }, {passive: true});
+  // Vertical scroll containers
+  document.querySelectorAll('#menu-scroll').forEach(el => {
+    let isDragging = false, startY = 0, startScrollTop = 0;
+
+    el.addEventListener('pointerdown', e => {
+      isDragging = true;
+      startY = e.clientY;
+      startScrollTop = el.scrollTop;
+      el.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+
+    el.addEventListener('pointermove', e => {
+      if (!isDragging) return;
+      const dy = startY - e.clientY;
+      el.scrollTop = startScrollTop + dy;
+      e.preventDefault();
+    });
+
+    el.addEventListener('pointerup', () => isDragging = false);
+    el.addEventListener('pointercancel', () => isDragging = false);
   });
 
+  // Horizontal scroll rows
   document.querySelectorAll('.overflow-x-auto').forEach(el => {
-    let startX, startLeft;
-    el.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-      startLeft = el.scrollLeft;
-    }, {passive: true});
-    el.addEventListener('touchmove', e => {
-      el.scrollLeft = startLeft + (startX - e.touches[0].clientX);
-    }, {passive: true});
+    let isDragging = false, startX = 0, startScrollLeft = 0;
+
+    el.addEventListener('pointerdown', e => {
+      isDragging = true;
+      startX = e.clientX;
+      startScrollLeft = el.scrollLeft;
+      el.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+
+    el.addEventListener('pointermove', e => {
+      if (!isDragging) return;
+      el.scrollLeft = startScrollLeft + (startX - e.clientX);
+      e.preventDefault();
+    });
+
+    el.addEventListener('pointerup', () => isDragging = false);
+    el.addEventListener('pointercancel', () => isDragging = false);
   });
 }
 </script>

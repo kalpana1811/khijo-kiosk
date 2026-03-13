@@ -9,7 +9,7 @@
 .flex{display:flex}.grid{display:grid}.hidden{display:none}.relative{position:relative}.absolute{position:absolute}.fixed{position:fixed}.inset-0{inset:0}
 .flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.min-w-0{min-width:0}
 .items-center{align-items:center}.items-start{align-items:flex-start}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.justify-end{justify-content:flex-end}
-.gap-1{gap:4px}.gap-1\.5{gap:6px}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}.gap-6{gap:24px}
+.gap-1{gap:4px}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}.gap-6{gap:24px}
 .space-y-4>*+*{margin-top:16px}
 .grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .w-full{width:100%}.h-full{height:100%}.min-h-full{min-height:100%}.w-fit{width:fit-content}
@@ -17,7 +17,7 @@
 .w-28{width:112px}.h-28{height:112px}.w-32{width:128px}.h-32{height:128px}.w-80{width:320px}
 .min-w-\[200px\]{min-width:200px}.min-w-\[60px\]{min-width:60px}
 .p-2{padding:8px}.p-3{padding:12px}.p-4{padding:16px}.p-6{padding:24px}.p-8{padding:32px}
-.px-1\.5{padding-left:6px;padding-right:6px}.px-2{padding-left:8px;padding-right:8px}.px-3{padding-left:12px;padding-right:12px}.px-4{padding-left:16px;padding-right:16px}.px-5{padding-left:20px;padding-right:20px}.px-6{padding-left:24px;padding-right:24px}.px-8{padding-left:32px;padding-right:32px}.px-12{padding-left:48px;padding-right:48px}
+.px-2{padding-left:8px;padding-right:8px}.px-3{padding-left:12px;padding-right:12px}.px-4{padding-left:16px;padding-right:16px}.px-5{padding-left:20px;padding-right:20px}.px-6{padding-left:24px;padding-right:24px}.px-8{padding-left:32px;padding-right:32px}.px-12{padding-left:48px;padding-right:48px}
 .py-0\.5{padding-top:2px;padding-bottom:2px}.py-1{padding-top:4px;padding-bottom:4px}.py-1\.5{padding-top:6px;padding-bottom:6px}.py-2{padding-top:8px;padding-bottom:8px}.py-3{padding-top:12px;padding-bottom:12px}.py-4{padding-top:16px;padding-bottom:16px}
 .pt-1{padding-top:4px}.pt-2{padding-top:8px}.pt-3{padding-top:12px}.pt-4{padding-top:16px}.pt-6{padding-top:24px}
 .pb-0{padding-bottom:0}.pb-2{padding-bottom:8px}.pb-4{padding-bottom:16px}.pb-6{padding-bottom:24px}
@@ -48,7 +48,7 @@
 .hover\:bg-gray-100:hover{background-color:#f3f4f6}.hover\:bg-gray-700:hover{background-color:#374151}.hover\:bg-gray-800:hover{background-color:#1f2937}
 .hover\:bg-red-50:hover{background-color:#fef2f2}.hover\:text-gray-800:hover{color:#1f2937}.hover\:scale-105:hover{transform:scale(1.05)}
 .hover\:bg-\[\#E0D8CC\]:hover{background-color:#E0D8CC}
-img{-webkit-user-drag:none;user-drag:none;pointer-events:none}
+img{-webkit-user-drag:none;pointer-events:none}
 </style>
 <style>
   * { box-sizing: border-box; -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important; }
@@ -435,7 +435,7 @@ function menuCardHTML(dish, idx, safe=true) {
     : `<div style="${fallbackStyle}" class="w-full h-full flex items-center justify-center"><span style="font-size:3rem">${catEmoji(cat)}</span></div>`;
 
   const addBtn = safe
-    ? `<button class="add-btn" style="padding:5px 12px;border-radius:8px;background:#111827;color:white;font-size:0.8rem;border:none;cursor:pointer" data-idx="${idx}">+ Add</button>`
+    ? `<button class="add-btn" style="padding:7px 16px;border-radius:8px;background:#111827;color:white;font-size:0.85rem;font-weight:500;border:none;cursor:pointer" data-idx="${idx}">+ Add</button>`
     : `<span class="text-xs text-red-600 font-medium">⚠ Not safe</span>`;
 
   return `
@@ -475,7 +475,7 @@ function fullMenuCardHTML(dish, idx, safe, reasons) {
       ${!safe ? `<p class="text-xs text-red-600 font-medium">⚠ ${reasons}</p>` : ''}
       <div class="flex items-center justify-between mt-auto pt-1">
         <span class="text-base font-semibold">£${price}</span>
-        <button class="add-btn" style="padding:5px 12px;border-radius:8px;background:#111827;color:white;font-size:0.8rem;border:none;cursor:pointer" data-idx="${idx}" data-name="${name}">+ Add</button>
+        <button class="add-btn" style="padding:7px 16px;border-radius:8px;background:#111827;color:white;font-size:0.85rem;font-weight:500;border:none;cursor:pointer" data-idx="${idx}" data-name="${name}">+ Add</button>
       </div>
     </div>
   </div>`;
@@ -731,7 +731,7 @@ function renderCart(el) {
       <h2 class="text-3xl mb-6">Your cart</h2>
 
       <!-- Items -->
-      <div style="flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;" class="scroll-hide space-y-4 pb-6" id="menu-scroll">
+      <div id="menu-scroll" style="flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;" class="scroll-hide space-y-4 pb-6">
         ${itemsHTML}
       </div>
 
@@ -1129,13 +1129,12 @@ function initScroll() {
   function onStart(cx, cy, target) {
     if (target.closest('button')) return;
     const horiz = target.closest('.overflow-x-auto');
-    const vert  = target.closest('#menu-scroll');
+    const vert = target.closest('#menu-scroll');
     if (!horiz && !vert) return;
     dragEl = horiz || vert;
     axis = null;
     resolved = false;
-    startX = cx;
-    startY = cy;
+    startX = cx; startY = cy;
     startScroll = horiz ? horiz.scrollLeft : vert.scrollTop;
   }
 

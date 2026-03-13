@@ -1093,41 +1093,52 @@ async function boot() {
 boot();
 
 function initScroll() {
-  // Use mousemove on document so drag works even if finger moves off element
-  let dragEl = null, axis = 'x', startPos = 0, startScroll = 0;
+  let dragEl = null, axis = null, startX = 0, startY = 0, startScroll = 0, resolved = false;
 
-  document.addEventListener('mousedown', e => {
-    const horiz = e.target.closest('.overflow-x-auto');
-    const vert  = e.target.closest('#menu-scroll');
-    if (e.target.closest('button')) return;
-    if (horiz) { dragEl = horiz; axis = 'x'; startPos = e.clientX; startScroll = horiz.scrollLeft; }
-    else if (vert) { dragEl = vert; axis = 'y'; startPos = e.clientY; startScroll = vert.scrollTop; }
-  });
+  function onStart(cx, cy, target) {
+    if (target.closest('button')) return;
+    const horiz = target.closest('.overflow-x-auto');
+    const vert  = target.closest('#menu-scroll');
+    if (!horiz && !vert) return;
+    dragEl = horiz || vert;
+    axis = null; // wait for move to resolve direction
+    resolved = false;
+    startX = cx;
+    startY = cy;
+    startScroll = horiz ? horiz.scrollLeft : vert.scrollTop;
+  }
 
-  document.addEventListener('mousemove', e => {
+  function onMove(cx, cy) {
     if (!dragEl) return;
-    if (axis === 'x') dragEl.scrollLeft = startScroll + (startPos - e.clientX);
-    else dragEl.scrollTop = startScroll + (startPos - e.clientY);
-  });
+    const dx = Math.abs(cx - startX);
+    const dy = Math.abs(cy - startY);
+    if (!resolved && (dx > 5 || dy > 5)) {
+      // if inside a horiz container, prefer horiz if dx>dy, else vert
+      const isHorizEl = dragEl.classList.contains('overflow-x-auto');
+      axis = (isHorizEl && dx >= dy) ? 'x' : 'y';
+      // if axis is y but dragEl is horiz container, find parent vert
+      if (axis === 'y' && dragEl.classList.contains('overflow-x-auto')) {
+        dragEl = dragEl.closest('#menu-scroll') || dragEl;
+        startScroll = dragEl.scrollTop;
+      }
+      resolved = true;
+    }
+    if (!resolved || !axis) return;
+    if (axis === 'x') dragEl.scrollLeft = startScroll + (startX - cx);
+    else dragEl.scrollTop = startScroll + (startY - cy);
+  }
 
-  document.addEventListener('mouseup', () => { dragEl = null; });
+  function onEnd() { dragEl = null; axis = null; resolved = false; }
 
-  // Touch events for actual touchscreen
-  document.addEventListener('touchstart', e => {
-    const horiz = e.target.closest('.overflow-x-auto');
-    const vert  = e.target.closest('#menu-scroll');
-    if (e.target.closest('button')) return;
-    if (horiz) { dragEl = horiz; axis = 'x'; startPos = e.touches[0].clientX; startScroll = horiz.scrollLeft; }
-    else if (vert) { dragEl = vert; axis = 'y'; startPos = e.touches[0].clientY; startScroll = vert.scrollTop; }
-  }, {passive: true});
+  // Mouse
+  document.addEventListener('mousedown', e => onStart(e.clientX, e.clientY, e.target));
+  document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+  document.addEventListener('mouseup', onEnd);
 
-  document.addEventListener('touchmove', e => {
-    if (!dragEl) return;
-    if (axis === 'x') dragEl.scrollLeft = startScroll + (startPos - e.touches[0].clientX);
-    else dragEl.scrollTop = startScroll + (startPos - e.touches[0].clientY);
-  }, {passive: true});
-
-  document.addEventListener('touchend', () => { dragEl = null; }, {passive: true});
+  // Touch
+  document.addEventListener('touchstart', e => onStart(e.touches[0].clientX, e.touches[0].clientY, e.target), {passive:true});
+  document.addEventListener('touchmove', e => { if (dragEl) onMove(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
+  document.addEventListener('touchend', onEnd, {passive:true});
 }
 </script>
 </body>

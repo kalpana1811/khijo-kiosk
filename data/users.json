@@ -1,140 +1,217 @@
 {
   "1047571399431": {
-    "name": "Alex Carter",    "age": 20,
-    "allergies": ["peanuts", "eggs"],
+    "name": "Alex Carter",
+    "age": 20,
+    "allergies": [
+      "eggs"
+    ],
     "avoid": [],
-    "dietary_preferences": ["vegetarian"],
+    "dietary_preferences": [
+      "vegetarian"
+    ],
     "order_history": [
       "Tofu Katsu Noodle Soup",
-      "Veg Gyoza Yakisoba",
+      "Pumpkin Yakisoba",
+      "Veg Gyoza Curry Rice",
       "Tofu Katsu Curry Rice",
-      "Tofu Katsu Noodle Soup",
-      "Pumpkin Teriyaki Rice",
       "Vegetable Gyoza Noodle Soup",
-      "Tofu Katsu Yakisoba"
+      "Pumpkin Teriyaki Rice",
+      "Veg Tempura Yakisoba",
+      "Tofu Katsu Noodle Soup",
+      "Veg Gyoza Yakisoba",
+      "Pumpkin Curry Rice"
     ]
   },
-
   "584188161585": {
     "name": "Nicholas Smith",
     "age": 22,
-    "allergies": ["gluten", "dairy"],
-    "avoid": ["pork"],
-    "dietary_preferences": ["halal", "gluten-free"],
+    "allergies": [
+      "peanuts",
+      "soy"
+    ],
+    "avoid": [
+      "pork"
+    ],
+    "dietary_preferences": [
+      "gluten-free"
+    ],
     "order_history": [
-      "Halal Chicken Ramen",
-      "Chilli Chicken + Tea Egg + Random Drink",
-      "Halal Chicken Udon",
-      "Halal Chicken Yakisoba",
-      "Halal Chicken Ramen",
-      "Chilli Chicken Halal Rice"
+      "Grilled Chicken Teriyaki Rice",
+      "Beef Sliced Yakisoba",
+      "Chilli Chicken Udon",
+      "Beef Slice Teriyaki Rice",
+      "Chicken Katsu Noodle Soup",
+      "Grilled Chicken Yakisoba",
+      "Beef Curry Rice",
+      "Chilli Chicken Yakisoba",
+      "Chicken Gyoza Noodle Soup",
+      "Grilled Chicken Teriyaki Rice"
     ]
   },
-
   "584196495686": {
     "name": "Sara Malik",
     "age": 21,
     "allergies": [],
     "avoid": [],
-    "dietary_preferences": ["high protein", "halal"],
+    "dietary_preferences": [
+      "halal"
+    ],
     "order_history": [
       "Halal Chicken Katsu Noodle Soup",
       "Beef Slice Halal Rice",
+      "Grilled Chicken Teriyaki Rice",
       "Halal Chicken Katsu Curry Rice",
-      "Halal Chicken Yakisoba",
-      "Beef Slice Halal Rice",
       "Chilli Chicken + Tea Egg + Random Drink",
+      "Halal Chicken Yakisoba",
+      "Beef Slice Teriyaki Rice",
+      "Halal Chicken Udon",
+      "Beef Slice Halal Rice",
       "Halal Chicken Katsu Noodle Soup"
     ]
   },
-
   "100004": {
     "name": "Priya Nair",
     "age": 19,
-    "allergies": ["fish", "tree nuts"],
-    "avoid": ["beef", "pork"],
-    "dietary_preferences": ["vegetarian"],
+    "allergies": [
+      "fish",
+      "tree nuts"
+    ],
+    "avoid": [
+      "beef",
+      "pork"
+    ],
+    "dietary_preferences": [
+      "vegetarian"
+    ],
     "order_history": [
       "Tofu Katsu Noodle Soup",
       "Pumpkin Yakisoba",
       "Tofu Teriyaki Rice",
       "Veg Gyoza Yakisoba",
       "Tofu Katsu Curry Rice",
-      "Pumpkin Curry Rice"
+      "Pumpkin Curry Rice",
+      "Veg Tempura Teriyaki Rice",
+      "Tofu Katsu Yakisoba",
+      "Vegetable Gyoza Noodle Soup",
+      "Pumpkin Teriyaki Rice"
     ]
   },
-
   "100005": {
     "name": "Liam Chen",
     "age": 23,
-    "allergies": ["soy"],
-    "avoid": ["chicken", "grapefruit"],
-    "dietary_preferences": ["low calorie"],
+    "allergies": [
+      "soy"
+    ],
+    "avoid": [
+      "chicken",
+      "grapefruit"
+    ],
+    "dietary_preferences": [
+      "low calorie"
+    ],
     "order_history": [
       "Spicy Beef Udon",
       "Beef Sliced Yakisoba",
       "Spicy Beef Ramen",
       "Beef Slice Teriyaki Rice",
+      "Beef Curry Rice",
       "Spicy Beef Udon",
+      "Beef Sliced Noodle Soup",
+      "Beef Slice Teriyaki Rice",
+      "Spicy Beef Ramen",
       "Beef Curry Rice"
     ]
   },
-
   "100006": {
     "name": "Fatima Al-Rashid",
     "age": 20,
-    "allergies": ["dairy", "eggs"],
-    "avoid": ["pork"],
-    "dietary_preferences": ["halal", "vegan"],
+    "allergies": [
+      "dairy",
+      "eggs"
+    ],
+    "avoid": [
+      "pork"
+    ],
+    "dietary_preferences": [
+      "halal",
+      "vegan"
+    ],
     "order_history": [
       "Vegetable Gyoza Noodle Soup",
       "Tofu Katsu Momo",
       "Pumpkin Teriyaki Rice",
       "Veg Gyoza Curry Rice",
-      "Vegetable Gyoza Noodle Soup",
       "Tofu Teriyaki Rice",
-      "Pumpkin Yakisoba"
+      "Pumpkin Yakisoba",
+      "Vegetable Gyoza Noodle Soup",
+      "Veg Tempura Teriyaki Rice",
+      "Tofu Katsu Curry Rice",
+      "Pumpkin Curry Rice"
     ]
   },
-
   "100007": {
     "name": "Noah Williams",
     "age": 21,
-    "allergies": ["gluten"],
-    "avoid": ["high sodium foods"],
-    "dietary_preferences": ["gluten-free", "low calorie"],
+    "allergies": [
+      "gluten"
+    ],
+    "avoid": [
+      "high sodium foods"
+    ],
+    "dietary_preferences": [
+      "gluten-free",
+      "low calorie"
+    ],
     "order_history": [
       "Glutinous Rice Cake",
       "Green Tea 500ml",
       "Still Water 500ml",
-      "Glutinous Rice Cake",
       "Apple Gyoza",
+      "Glutinous Rice Cake",
+      "Green Tea 500ml",
+      "Still Water 500ml",
+      "Apple Gyoza",
+      "Braised Egg",
       "Green Tea 500ml"
     ]
   },
-
   "100008": {
     "name": "Mei Zhang",
     "age": 22,
-    "allergies": ["peanuts", "soy", "tree nuts"],
+    "allergies": [
+      "peanuts",
+      "soy",
+      "tree nuts"
+    ],
     "avoid": [],
-    "dietary_preferences": ["vegan", "low calorie"],
+    "dietary_preferences": [
+      "vegan",
+      "low calorie"
+    ],
     "order_history": [
       "Pumpkin Yakisoba",
       "Veg Tempura Teriyaki Rice",
       "Pumpkin Teriyaki Rice",
       "Veg Gyoza Yakisoba",
       "Pumpkin Curry Rice",
-      "Veg Tempura Curry Rice"
+      "Veg Tempura Curry Rice",
+      "Vegetable Gyoza Noodle Soup",
+      "Pumpkin Yakisoba",
+      "Veg Tempura Teriyaki Rice",
+      "Pumpkin Teriyaki Rice"
     ]
   },
-
   "100009": {
     "name": "Daniel Murphy",
     "age": 24,
     "allergies": [],
-    "avoid": ["fish", "seafood", "grapefruit", "high sodium foods"],
-    "dietary_preferences": ["high protein"],
+    "avoid": [
+      "fish",
+      "seafood"
+    ],
+    "dietary_preferences": [
+      "high protein"
+    ],
     "order_history": [
       "Spicy Pork Rib Ramen",
       "Braised Pork Belly Noodle Soup",
@@ -142,24 +219,37 @@
       "Spicy Pork Belly Ramen",
       "Braised Pork Momo + Braised Egg + Random Drink",
       "Spicy Pork Rib Udon",
-      "Pork Meatball Teriyaki Rice"
+      "Pork Meatball Teriyaki Rice",
+      "Spicy Pork Belly Udon",
+      "Braised Pork Rib Noodle Soup",
+      "Pork Meatball Yakisoba"
     ]
   },
-
   "100010": {
     "name": "Aisha Osman",
     "age": 20,
-    "allergies": ["dairy"],
-    "avoid": ["pork", "beef"],
-    "dietary_preferences": ["halal", "vegetarian"],
+    "allergies": [
+      "dairy"
+    ],
+    "avoid": [
+      "pork",
+      "beef"
+    ],
+    "dietary_preferences": [
+      "halal",
+      "vegetarian"
+    ],
     "order_history": [
       "Tofu Katsu Noodle Soup",
       "Halal Chicken Udon",
       "Tofu Katsu Curry Rice",
       "Halal Chicken Yakisoba",
-      "Tofu Katsu Noodle Soup",
       "Tofu Teriyaki Rice",
-      "Halal Chicken Ramen"
+      "Halal Chicken Ramen",
+      "Tofu Katsu Noodle Soup",
+      "Halal Chicken Katsu Noodle Soup",
+      "Veg Tempura Teriyaki Rice",
+      "Halal Chicken Udon"
     ]
   }
 }

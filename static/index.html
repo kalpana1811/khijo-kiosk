@@ -1093,58 +1093,37 @@ async function boot() {
 boot();
 
 function initScroll() {
-  // Vertical scroll
+  // Vertical scroll - pointer events
   document.querySelectorAll('#menu-scroll').forEach(el => {
-    let isDragging = false, startY = 0, startTop = 0, moved = false;
-
+    let active = false, startY = 0, startTop = 0;
     el.addEventListener('pointerdown', e => {
-      if (e.target.closest('button, a')) return; // don't interfere with buttons
-      isDragging = true;
-      moved = false;
+      if (e.target.closest('button')) return;
+      active = true;
       startY = e.clientY;
       startTop = el.scrollTop;
       el.setPointerCapture(e.pointerId);
     });
-
     el.addEventListener('pointermove', e => {
-      if (!isDragging) return;
-      const dy = startY - e.clientY;
-      if (Math.abs(dy) > 5) {
-        moved = true;
-        el.scrollTop = startTop + dy;
-        e.preventDefault();
-      }
+      if (!active) return;
+      el.scrollTop = startTop + (startY - e.clientY);
     });
-
-    el.addEventListener('pointerup', e => {
-      isDragging = false;
-    });
-    el.addEventListener('pointercancel', () => isDragging = false);
+    el.addEventListener('pointerup', () => { active = false; });
+    el.addEventListener('pointercancel', () => { active = false; });
   });
 
-  // Horizontal scroll
+  // Horizontal scroll - use native touch only, no pointer capture
   document.querySelectorAll('.overflow-x-auto').forEach(el => {
-    let isDragging = false, startX = 0, startLeft = 0;
-
-    el.addEventListener('pointerdown', e => {
-      if (e.target.closest('button, a')) return;
-      isDragging = true;
-      startX = e.clientX;
+    let startX = 0, startLeft = 0, active = false;
+    el.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
       startLeft = el.scrollLeft;
-      el.setPointerCapture(e.pointerId);
-    });
-
-    el.addEventListener('pointermove', e => {
-      if (!isDragging) return;
-      const dx = startX - e.clientX;
-      if (Math.abs(dx) > 5) {
-        el.scrollLeft = startLeft + dx;
-        e.preventDefault();
-      }
-    });
-
-    el.addEventListener('pointerup', () => isDragging = false);
-    el.addEventListener('pointercancel', () => isDragging = false);
+      active = true;
+    }, {passive: true});
+    el.addEventListener('touchmove', e => {
+      if (!active) return;
+      el.scrollLeft = startLeft + (startX - e.touches[0].clientX);
+    }, {passive: true});
+    el.addEventListener('touchend', () => { active = false; }, {passive: true});
   });
 }
 </script>

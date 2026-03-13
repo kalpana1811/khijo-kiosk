@@ -260,7 +260,7 @@ function render() {
   else if (state.screen === 'orderPlaced') renderOrderPlaced(screen);
 
   app.appendChild(screen);
-  setTimeout(initDragScroll, 50);
+  setTimeout(initScroll, 30);
 }
 
 // ─── WELCOME SCREEN ───────────────────────────────────────────────────────
@@ -1097,46 +1097,45 @@ async function boot() {
 
 boot();
 
-// Drag-anywhere scroll for horizontal rows
-function initDragScroll() {
+function initScroll() {
+  // ── Horizontal drag scroll (food card rows) ──
   document.querySelectorAll('.overflow-x-auto').forEach(el => {
-    let isDown = false, startX, scrollLeft;
-    el.addEventListener('mousedown', e => {
-      isDown = true; el.style.cursor = 'grabbing';
-      startX = e.pageX - el.offsetLeft;
-      scrollLeft = el.scrollLeft;
-    });
-    el.addEventListener('mouseleave', () => { isDown = false; el.style.cursor = 'grab'; });
-    el.addEventListener('mouseup', () => { isDown = false; el.style.cursor = 'grab'; });
-    el.addEventListener('mousemove', e => {
-      if (!isDown) return;
-      e.preventDefault();
-      el.scrollLeft = scrollLeft - (e.pageX - el.offsetLeft - startX);
-    });
-    // Touch
-    let touchStartX, touchScrollLeft;
+    let startX = 0, startScroll = 0, dragging = false;
+
     el.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].pageX;
-      touchScrollLeft = el.scrollLeft;
+      startX = e.touches[0].clientX;
+      startScroll = el.scrollLeft;
+      dragging = true;
     }, {passive: true});
+
     el.addEventListener('touchmove', e => {
-      const dx = touchStartX - e.touches[0].pageX;
-      el.scrollLeft = touchScrollLeft + dx;
+      if (!dragging) return;
+      const dx = startX - e.touches[0].clientX;
+      el.scrollLeft = startScroll + dx;
     }, {passive: true});
-    el.style.cursor = 'grab';
-    el.style.overflow = 'hidden'; // hide scrollbar, use drag instead
+
+    el.addEventListener('touchend', () => { dragging = false; }, {passive: true});
+  });
+
+  // ── Vertical touch scroll (main content area) ──
+  document.querySelectorAll('.overflow-y-auto').forEach(el => {
+    let startY = 0, startScroll = 0, dragging = false;
+
+    el.addEventListener('touchstart', e => {
+      startY = e.touches[0].clientY;
+      startScroll = el.scrollTop;
+      dragging = true;
+    }, {passive: true});
+
+    el.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      const dy = startY - e.touches[0].clientY;
+      el.scrollTop = startScroll + dy;
+    }, {passive: true});
+
+    el.addEventListener('touchend', () => { dragging = false; }, {passive: true});
   });
 }
-
-// Vertical touch scroll for main content
-document.addEventListener('touchstart', e => {
-  const el = e.target.closest('.overflow-y-auto');
-  if (el) { el._ty = e.touches[0].clientY; el._ts = el.scrollTop; }
-}, {passive: true});
-document.addEventListener('touchmove', e => {
-  const el = e.target.closest('.overflow-y-auto');
-  if (el) { el.scrollTop = el._ts + (el._ty - e.touches[0].clientY); }
-}, {passive: true});
 </script>
 </body>
 </html>

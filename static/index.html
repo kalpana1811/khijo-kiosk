@@ -19,7 +19,7 @@
   }
 </script>
 <style>
-  * { box-sizing: border-box; -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important; pointer-events: auto; }
+  * { box-sizing: border-box; -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important; }
   body { margin: 0; padding: 0; background: #F5F0E8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #F5F0E8; }
   * { box-sizing: border-box; }
@@ -36,7 +36,6 @@
   /* Card hover */
   .menu-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
   img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
-  p, h1, h2, h3, span, div { -webkit-user-select: none; user-select: none; }
   .menu-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
 
   /* Button transitions */
@@ -493,7 +492,7 @@ function renderMenu(el) {
       <!-- Recommended -->
       <h2 class="text-xl mb-2">Recommended for you</h2>
       <div class="flex gap-4 overflow-x-auto scroll-hide pb-4" id="rec-row">
-        ${recs.map((d,i) => menuCardHTML(d, i, true)).join('')}
+        ${recs.slice(0,3).map((d,i) => menuCardHTML(d, i, true)).join('')}
         <div class="flex items-center justify-center min-w-[60px] flex-shrink-0">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
@@ -1100,45 +1099,54 @@ async function boot() {
 boot();
 
 function initScroll() {
-  // Vertical scroll containers
+  // Vertical scroll
   document.querySelectorAll('#menu-scroll').forEach(el => {
-    let isDragging = false, startY = 0, startScrollTop = 0;
+    let isDragging = false, startY = 0, startTop = 0, moved = false;
 
     el.addEventListener('pointerdown', e => {
+      if (e.target.closest('button, a')) return; // don't interfere with buttons
       isDragging = true;
+      moved = false;
       startY = e.clientY;
-      startScrollTop = el.scrollTop;
+      startTop = el.scrollTop;
       el.setPointerCapture(e.pointerId);
-      e.preventDefault();
     });
 
     el.addEventListener('pointermove', e => {
       if (!isDragging) return;
       const dy = startY - e.clientY;
-      el.scrollTop = startScrollTop + dy;
-      e.preventDefault();
+      if (Math.abs(dy) > 5) {
+        moved = true;
+        el.scrollTop = startTop + dy;
+        e.preventDefault();
+      }
     });
 
-    el.addEventListener('pointerup', () => isDragging = false);
+    el.addEventListener('pointerup', e => {
+      isDragging = false;
+    });
     el.addEventListener('pointercancel', () => isDragging = false);
   });
 
-  // Horizontal scroll rows
+  // Horizontal scroll
   document.querySelectorAll('.overflow-x-auto').forEach(el => {
-    let isDragging = false, startX = 0, startScrollLeft = 0;
+    let isDragging = false, startX = 0, startLeft = 0;
 
     el.addEventListener('pointerdown', e => {
+      if (e.target.closest('button, a')) return;
       isDragging = true;
       startX = e.clientX;
-      startScrollLeft = el.scrollLeft;
+      startLeft = el.scrollLeft;
       el.setPointerCapture(e.pointerId);
-      e.preventDefault();
     });
 
     el.addEventListener('pointermove', e => {
       if (!isDragging) return;
-      el.scrollLeft = startScrollLeft + (startX - e.clientX);
-      e.preventDefault();
+      const dx = startX - e.clientX;
+      if (Math.abs(dx) > 5) {
+        el.scrollLeft = startLeft + dx;
+        e.preventDefault();
+      }
     });
 
     el.addEventListener('pointerup', () => isDragging = false);

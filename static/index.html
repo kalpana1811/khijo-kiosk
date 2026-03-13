@@ -1093,51 +1093,41 @@ async function boot() {
 boot();
 
 function initScroll() {
-  function addDragScroll(el, axis) {
-    let active = false, startPos = 0, startScroll = 0, lastPos = 0, velocity = 0, lastTime = 0, rafId = null;
+  // Use mousemove on document so drag works even if finger moves off element
+  let dragEl = null, axis = 'x', startPos = 0, startScroll = 0;
 
-    el.addEventListener('pointerdown', e => {
-      if (e.target.closest('button')) return;
-      active = true;
-      startPos = axis === 'y' ? e.clientY : e.clientX;
-      startScroll = axis === 'y' ? el.scrollTop : el.scrollLeft;
-      lastPos = startPos;
-      velocity = 0;
-      if (rafId) cancelAnimationFrame(rafId);
-      el.setPointerCapture(e.pointerId);
-    });
+  document.addEventListener('mousedown', e => {
+    const horiz = e.target.closest('.overflow-x-auto');
+    const vert  = e.target.closest('#menu-scroll');
+    if (e.target.closest('button')) return;
+    if (horiz) { dragEl = horiz; axis = 'x'; startPos = e.clientX; startScroll = horiz.scrollLeft; }
+    else if (vert) { dragEl = vert; axis = 'y'; startPos = e.clientY; startScroll = vert.scrollTop; }
+  });
 
-    el.addEventListener('pointermove', e => {
-      if (!active) return;
-      const pos = axis === 'y' ? e.clientY : e.clientX;
-      const now = Date.now();
-      velocity = (lastPos - pos) / Math.max(1, now - lastTime);
-      lastPos = pos;
-      lastTime = now;
-      const delta = startPos - pos;
-      if (axis === 'y') el.scrollTop = startScroll + delta;
-      else el.scrollLeft = startScroll + delta;
-    });
+  document.addEventListener('mousemove', e => {
+    if (!dragEl) return;
+    if (axis === 'x') dragEl.scrollLeft = startScroll + (startPos - e.clientX);
+    else dragEl.scrollTop = startScroll + (startPos - e.clientY);
+  });
 
-    el.addEventListener('pointerup', () => {
-      active = false;
-      // momentum
-      let v = velocity;
-      function momentum() {
-        if (Math.abs(v) < 0.1) return;
-        if (axis === 'y') el.scrollTop += v * 16;
-        else el.scrollLeft += v * 16;
-        v *= 0.92;
-        rafId = requestAnimationFrame(momentum);
-      }
-      momentum();
-    });
+  document.addEventListener('mouseup', () => { dragEl = null; });
 
-    el.addEventListener('pointercancel', () => { active = false; });
-  }
+  // Touch events for actual touchscreen
+  document.addEventListener('touchstart', e => {
+    const horiz = e.target.closest('.overflow-x-auto');
+    const vert  = e.target.closest('#menu-scroll');
+    if (e.target.closest('button')) return;
+    if (horiz) { dragEl = horiz; axis = 'x'; startPos = e.touches[0].clientX; startScroll = horiz.scrollLeft; }
+    else if (vert) { dragEl = vert; axis = 'y'; startPos = e.touches[0].clientY; startScroll = vert.scrollTop; }
+  }, {passive: true});
 
-  document.querySelectorAll('#menu-scroll').forEach(el => addDragScroll(el, 'y'));
-  document.querySelectorAll('.overflow-x-auto').forEach(el => addDragScroll(el, 'x'));
+  document.addEventListener('touchmove', e => {
+    if (!dragEl) return;
+    if (axis === 'x') dragEl.scrollLeft = startScroll + (startPos - e.touches[0].clientX);
+    else dragEl.scrollTop = startScroll + (startPos - e.touches[0].clientY);
+  }, {passive: true});
+
+  document.addEventListener('touchend', () => { dragEl = null; }, {passive: true});
 }
 </script>
 </body>

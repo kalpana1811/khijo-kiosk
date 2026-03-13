@@ -53,6 +53,6 @@ def _enrich(sess):
     return sess
 
 if __name__ == '__main__':
-    print("\n🐙 KHIJO server starting at http://localhost:8080\n")
+    print("\n🐙 KHIJO server starting at http://localhost:5001\n")
     kiosk_engine.start_rfid_thread()  # Start RFID background thread
-    app.run(host='0.0.0.0', port=8080, debug=False, use_reloader=False)
+    app.run(host='0.0.0.0', port=5001, debug=False, use_reloader=False)

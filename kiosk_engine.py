@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from modules.filter import load_data, filter_menu
 from modules.recommender import get_recommendations, get_surprise, get_healthy_options, get_last_order
 
-SIMULATION = False  # True = Mac dev (guest button), False = Pi with real RC522
+SIMULATION = True  # True = Mac dev (guest button), False = Pi with real RC522
 
 # ── Shared state from background RFID thread ──
 _last_uid = None

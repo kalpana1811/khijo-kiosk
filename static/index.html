@@ -1128,14 +1128,18 @@ function initScroll() {
 
   function onStart(cx, cy, target) {
     if (target.closest('button')) return;
-    const horiz = target.closest('.overflow-x-auto');
     const vert = target.closest('#menu-scroll');
-    if (!horiz && !vert) return;
-    dragEl = horiz || vert;
+    const horiz = target.closest('.overflow-x-auto');
+    // wait until move to decide - store both candidates
+    if (!vert && !horiz) return;
+    // store vert as primary, horiz as secondary
+    dragEl = vert || horiz;
+    dragEl._horiz = horiz;
+    dragEl._vert = vert;
     axis = null;
     resolved = false;
     startX = cx; startY = cy;
-    startScroll = horiz ? horiz.scrollLeft : vert.scrollTop;
+    startScroll = 0;
   }
 
   function onMove(cx, cy) {
@@ -1143,11 +1147,16 @@ function initScroll() {
     const dx = Math.abs(cx - startX);
     const dy = Math.abs(cy - startY);
     if (!resolved && (dx > 5 || dy > 5)) {
-      const isHorizEl = dragEl.classList.contains('overflow-x-auto');
-      axis = (isHorizEl && dx >= dy) ? 'x' : 'y';
-      if (axis === 'y' && dragEl.classList.contains('overflow-x-auto')) {
-        dragEl = dragEl.closest('#menu-scroll') || dragEl;
+      if (dy > dx) {
+        // vertical swipe - use vert container
+        axis = 'y';
+        dragEl = dragEl._vert || dragEl;
         startScroll = dragEl.scrollTop;
+      } else {
+        // horizontal swipe - use horiz container
+        axis = 'x';
+        dragEl = dragEl._horiz || dragEl;
+        startScroll = dragEl.scrollLeft;
       }
       resolved = true;
     }

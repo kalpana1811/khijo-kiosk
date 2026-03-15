@@ -519,7 +519,7 @@ function renderMenu(el) {
     </div>
 
     <!-- Scrollable content -->
-    <div class="flex-1 overflow-y-auto scroll-hide px-6 pt-2 pb-2">
+    <div class="flex-1 overflow-y-auto scroll-hide px-6 pt-2 pb-2" id="menu-vert" style="overflow-y:scroll;-webkit-overflow-scrolling:touch;">
       <!-- Recommended -->
       <h2 class="text-xl mb-2">Recommended for you</h2>
       <div class="flex gap-4 overflow-x-auto scroll-hide pb-4" id="rec-row">
@@ -1124,46 +1124,56 @@ async function boot() {
 boot();
 
 function initScroll() {
-  let dragEl = null, axis = null, startX = 0, startY = 0, startScroll = 0, resolved = false;
+  function initScroll() {
+  let startX = 0, startY = 0;
+  let horizEl = null, vertEl = null;
+  let startScrollX = 0, startScrollY = 0;
+  let axisResolved = false;
+  let activeAxis = null;
 
   function onStart(cx, cy, target) {
     if (target.closest('button')) return;
-    const horiz = target.closest('.overflow-x-auto');
-    const vert = target.closest('#menu-scroll');
-    if (!horiz && !vert) return;
-    dragEl = horiz || vert;
-    axis = null;
-    resolved = false;
+    horizEl = target.closest('.overflow-x-auto') || null;
+    vertEl  = target.closest('#menu-vert') || target.closest('#menu-scroll') || null;
+    if (!horizEl && !vertEl) return;
     startX = cx; startY = cy;
-    startScroll = horiz ? horiz.scrollLeft : vert.scrollTop;
+    startScrollX = horizEl ? horizEl.scrollLeft : 0;
+    startScrollY = vertEl  ? vertEl.scrollTop   : 0;
+    axisResolved = false;
+    activeAxis   = null;
   }
 
   function onMove(cx, cy) {
-    if (!dragEl) return;
-    const dx = Math.abs(cx - startX);
-    const dy = Math.abs(cy - startY);
-    if (!resolved && (dx > 5 || dy > 5)) {
-      const isHorizEl = dragEl.classList.contains('overflow-x-auto');
-      axis = (isHorizEl && dx >= dy) ? 'x' : 'y';
-      if (axis === 'y' && dragEl.classList.contains('overflow-x-auto')) {
-        dragEl = dragEl.closest('#menu-scroll') || dragEl;
-        startScroll = dragEl.scrollTop;
-      }
-      resolved = true;
+    if (!horizEl && !vertEl) return;
+    const dx = cx - startX;
+    const dy = cy - startY;
+    const adx = Math.abs(dx);
+    const ady = Math.abs(dy);
+    if (!axisResolved && (adx > 6 || ady > 6)) {
+      if (adx > ady * 1.4)      activeAxis = 'x';
+      else if (ady > adx * 1.4) activeAxis = 'y';
+      else                      activeAxis = 'both';
+      axisResolved = true;
     }
-    if (!resolved || !axis) return;
-    if (axis === 'x') dragEl.scrollLeft = startScroll + (startX - cx);
-    else dragEl.scrollTop = startScroll + (startY - cy);
+    if (!axisResolved) return;
+    if ((activeAxis === 'x' || activeAxis === 'both') && horizEl)
+      horizEl.scrollLeft = startScrollX - dx;
+    if ((activeAxis === 'y' || activeAxis === 'both') && vertEl)
+      vertEl.scrollTop = startScrollY - dy;
   }
 
-  function onEnd() { dragEl = null; axis = null; resolved = false; }
+  function onEnd() {
+    horizEl = null; vertEl = null;
+    axisResolved = false; activeAxis = null;
+  }
 
-  document.addEventListener('mousedown', e => onStart(e.clientX, e.clientY, e.target));
-  document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
-  document.addEventListener('mouseup', onEnd);
+  document.addEventListener('mousedown',  e => onStart(e.clientX, e.clientY, e.target));
+  document.addEventListener('mousemove',  e => onMove(e.clientX, e.clientY));
+  document.addEventListener('mouseup',    onEnd);
   document.addEventListener('touchstart', e => onStart(e.touches[0].clientX, e.touches[0].clientY, e.target), {passive:true});
-  document.addEventListener('touchmove', e => { if (dragEl) onMove(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
-  document.addEventListener('touchend', onEnd, {passive:true});
+  document.addEventListener('touchmove',  e => { if (horizEl||vertEl) onMove(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
+  document.addEventListener('touchend',   onEnd, {passive:true});
+  }
 }
 </script>
 </body>

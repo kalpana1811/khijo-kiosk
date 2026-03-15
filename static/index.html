@@ -1124,35 +1124,46 @@ async function boot() {
 boot();
 
 function initScroll() {
-  // ── Vertical scroll on #menu-scroll ──
-  document.querySelectorAll('#menu-scroll').forEach(el => {
-    let startY = 0, startTop = 0, tracking = false;
-    el.addEventListener('touchstart', e => {
-      tracking = true;
-      startY = e.touches[0].clientY;
-      startTop = el.scrollTop;
-    }, {passive:true});
-    el.addEventListener('touchmove', e => {
-      if (!tracking) return;
-      el.scrollTop = startTop + (startY - e.touches[0].clientY);
-    }, {passive:true});
-    el.addEventListener('touchend', () => { tracking = false; }, {passive:true});
-  });
+  let dragEl = null, axis = null, startX = 0, startY = 0, startScroll = 0, resolved = false;
 
-  // ── Horizontal scroll on card rows ──
-  document.querySelectorAll('.overflow-x-auto').forEach(el => {
-    let startX = 0, startLeft = 0, tracking = false;
-    el.addEventListener('touchstart', e => {
-      tracking = true;
-      startX = e.touches[0].clientX;
-      startLeft = el.scrollLeft;
-    }, {passive:true});
-    el.addEventListener('touchmove', e => {
-      if (!tracking) return;
-      el.scrollLeft = startLeft + (startX - e.touches[0].clientX);
-    }, {passive:true});
-    el.addEventListener('touchend', () => { tracking = false; }, {passive:true});
-  });
+  function onStart(cx, cy, target) {
+    if (target.closest('button')) return;
+    const horiz = target.closest('.overflow-x-auto');
+    const vert = target.closest('#menu-scroll');
+    if (!horiz && !vert) return;
+    dragEl = horiz || vert;
+    axis = null;
+    resolved = false;
+    startX = cx; startY = cy;
+    startScroll = horiz ? horiz.scrollLeft : vert.scrollTop;
+  }
+
+  function onMove(cx, cy) {
+    if (!dragEl) return;
+    const dx = Math.abs(cx - startX);
+    const dy = Math.abs(cy - startY);
+    if (!resolved && (dx > 5 || dy > 5)) {
+      const isHorizEl = dragEl.classList.contains('overflow-x-auto');
+      axis = (isHorizEl && dx >= dy) ? 'x' : 'y';
+      if (axis === 'y' && dragEl.classList.contains('overflow-x-auto')) {
+        dragEl = dragEl.closest('#menu-scroll') || dragEl;
+        startScroll = dragEl.scrollTop;
+      }
+      resolved = true;
+    }
+    if (!resolved || !axis) return;
+    if (axis === 'x') dragEl.scrollLeft = startScroll + (startX - cx);
+    else dragEl.scrollTop = startScroll + (startY - cy);
+  }
+
+  function onEnd() { dragEl = null; axis = null; resolved = false; }
+
+  document.addEventListener('mousedown', e => onStart(e.clientX, e.clientY, e.target));
+  document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+  document.addEventListener('mouseup', onEnd);
+  document.addEventListener('touchstart', e => onStart(e.touches[0].clientX, e.touches[0].clientY, e.target), {passive:true});
+  document.addEventListener('touchmove', e => { if (dragEl) onMove(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
+  document.addEventListener('touchend', onEnd, {passive:true});
 }
 </script>
 </body>

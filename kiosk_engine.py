@@ -63,6 +63,7 @@ def play_order_beep():
         _gen_beep('/tmp/beep1.wav', 660, 0.2)
         _gen_beep('/tmp/beep2.wav', 880, 0.3)
         os.system('aplay /tmp/beep1.wav 2>/dev/null && aplay /tmp/beep2.wav 2>/dev/null')
+        led_yellow()
     threading.Thread(target=_play, daemon=True).start()
 
 def stop_audio():

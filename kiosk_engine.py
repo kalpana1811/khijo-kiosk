@@ -19,23 +19,37 @@ _audio_played = False  # tracks if we already played audio for this person
 
 # ── Audio helpers ──
 def speak_async(text):
-    threading.Thread(
-        target=lambda: os.system(f'espeak "{text}" --stdout | aplay - 2>/dev/null'),
-        daemon=True
-    ).start()
+    def _speak():
+        os.system('pkill -f "espeak" 2>/dev/null; pkill -f "aplay" 2>/dev/null')
+        time.sleep(0.3)
+        os.system(f'espeak "{text}" --stdout | aplay - 2>/dev/null')
+    threading.Thread(target=_speak, daemon=True).start()
+
+def _gen_beep(filename, freq, dur, vol=28000):
+    import math, wave, struct
+    sr = 44100
+    frames = b"".join(
+        struct.pack("<h", int(vol * math.sin(2*math.pi*freq*i/sr) * max(0, 1-i/(sr*dur*0.6))))
+        for i in range(int(sr*dur))
+    )
+    with wave.open(filename, 'wb') as w:
+        w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr)
+        w.writeframes(frames)
 
 def play_ding():
-    threading.Thread(
-        target=lambda: os.system(
-            'python3 -c "'
-            'import math,wave,struct; sr=44100; dur=0.5; freq=880;'
-            'frames=b\"\".join(struct.pack(\"<h\",int(28000*math.sin(2*math.pi*freq*i/sr)*max(0,1-i/(sr*dur*0.7)))) for i in range(int(sr*dur)));'
-            'f=open(\"/tmp/ding.wav\",\"wb\");'
-            'import wave as wv; w=wv.open(f); w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr); w.writeframes(frames); w.close()'
-            '" && aplay /tmp/ding.wav 2>/dev/null'
-        ),
-        daemon=True
-    ).start()
+    """Card tap beep - single high ding"""
+    def _play():
+        _gen_beep('/tmp/ding.wav', 880, 0.4)
+        os.system('aplay /tmp/ding.wav 2>/dev/null')
+    threading.Thread(target=_play, daemon=True).start()
+
+def play_order_beep():
+    """Order placed beep - two ascending tones"""
+    def _play():
+        _gen_beep('/tmp/beep1.wav', 660, 0.2)
+        _gen_beep('/tmp/beep2.wav', 880, 0.3)
+        os.system('aplay /tmp/beep1.wav 2>/dev/null && aplay /tmp/beep2.wav 2>/dev/null')
+    threading.Thread(target=_play, daemon=True).start()
 
 def stop_audio():
     os.system('pkill -f "espeak" 2>/dev/null; pkill -f "aplay" 2>/dev/null')
@@ -164,8 +178,6 @@ def get_session(uid=None):
     if user is None:
         return {"status": "not_found", "uid": uid, "message": f"Card {uid} not registered"}
 
-    name = user.get('name', '').split()[0]
-    speak_async(f"Hi {name}, let me filter the menu for you")
 
     safe_dishes, removed_dishes = filter_menu(user, menu)
     recs = [dish for dish, score in get_recommendations(user, menu, top_n=3)]

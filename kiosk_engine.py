@@ -4,7 +4,7 @@ kiosk_engine.py — Central brain of the KHIJO kiosk.
 - Ultrasonic sensor detects person approaching
 - Audio via espeak + aplay (default device)
 """
-import json, os, sys, threading, time, subprocess
+import json, os, sys, threading, time
 sys.path.insert(0, os.path.dirname(__file__))
 from modules.filter import load_data, filter_menu
 from modules.recommender import get_recommendations, get_surprise, get_healthy_options, get_last_order
@@ -14,13 +14,10 @@ SIMULATION = False  # True = Mac dev, False = Pi
 # ── Shared state ──
 _last_uid = None
 _uid_lock = threading.Lock()
-_welcome_speaking = False
 _person_present = False
+_audio_played = False  # tracks if we already played audio for this person
 
 # ── Audio helpers ──
-def speak(text):
-    os.system(f'espeak "{text}" --stdout | aplay - 2>/dev/null')
-
 def speak_async(text):
     threading.Thread(
         target=lambda: os.system(f'espeak "{text}" --stdout | aplay - 2>/dev/null'),
@@ -31,7 +28,7 @@ def play_ding():
     threading.Thread(
         target=lambda: os.system(
             'python3 -c "'
-            'import math,wave,struct,os; sr=44100; dur=0.5; freq=880;'
+            'import math,wave,struct; sr=44100; dur=0.5; freq=880;'
             'frames=b\"\".join(struct.pack(\"<h\",int(28000*math.sin(2*math.pi*freq*i/sr)*max(0,1-i/(sr*dur*0.7)))) for i in range(int(sr*dur)));'
             'f=open(\"/tmp/ding.wav\",\"wb\");'
             'import wave as wv; w=wv.open(f); w.setnchannels(1); w.setsampwidth(2); w.setframerate(sr); w.writeframes(frames); w.close()'
@@ -43,30 +40,9 @@ def play_ding():
 def stop_audio():
     os.system('pkill -f "espeak" 2>/dev/null; pkill -f "aplay" 2>/dev/null')
 
-# ── Welcome audio loop ──
-def welcome_loop():
-    global _welcome_speaking
-    os.system('espeak "Tap your SafeBite card" --stdout | aplay - 2>/dev/null')
-    _welcome_speaking = False
-
-def start_welcome_audio():
-    global _welcome_speaking
-    if _welcome_speaking:
-        return
-    _welcome_speaking = True
-    threading.Thread(target=welcome_loop, daemon=True).start()
-    # Reset person_present so it can trigger again next time
-    global _person_present
-    _person_present = False
-
-def stop_welcome_audio():
-    global _welcome_speaking
-    _welcome_speaking = False
-    stop_audio()
-
 # ── Ultrasonic sensor loop ──
 def _ultrasonic_loop():
-    global _person_present
+    global _person_present, _audio_played
     try:
         import RPi.GPIO as GPIO
         TRIG = 23
@@ -76,7 +52,7 @@ def _ultrasonic_loop():
         GPIO.setup(TRIG, GPIO.OUT)
         GPIO.setup(ECHO, GPIO.IN)
         print("Ultrasonic sensor started...")
-        
+
         consecutive_near = 0
         consecutive_far = 0
         THRESHOLD = 35  # cm
@@ -89,17 +65,17 @@ def _ultrasonic_loop():
                 GPIO.output(TRIG, True)
                 time.sleep(0.00001)
                 GPIO.output(TRIG, False)
-                
+
                 start = time.time()
                 timeout = start + 0.1
                 while GPIO.input(ECHO) == 0 and time.time() < timeout:
                     start = time.time()
                 while GPIO.input(ECHO) == 1 and time.time() < timeout:
                     end = time.time()
-                
+
                 try:
                     distance = round((end - start) * 17150, 1)
-                    if distance > 1000:  # ignore noise/timeout readings
+                    if distance > 1000:
                         time.sleep(0.5)
                         continue
 
@@ -110,19 +86,26 @@ def _ultrasonic_loop():
                         consecutive_far += 1
                         consecutive_near = 0
 
+                    # Person arrived - play audio ONCE
                     if consecutive_near >= CONFIRM and not _person_present:
                         _person_present = True
+                        _audio_played = False
                         print(f"Person confirmed at {distance}cm")
-                        start_welcome_audio()
 
+                    if _person_present and not _audio_played:
+                        _audio_played = True
+                        speak_async("Tap your SafeBite card")
+
+                    # Person left - reset everything
                     if consecutive_far >= CONFIRM and _person_present:
                         _person_present = False
+                        _audio_played = False
+                        consecutive_near = 0
                         print("Person left")
-                        stop_welcome_audio()
 
                 except:
                     pass
-                    
+
                 time.sleep(0.5)
             except Exception as e:
                 print(f"Ultrasonic error: {e}")
@@ -132,7 +115,7 @@ def _ultrasonic_loop():
 
 # ── RFID background thread ──
 def _rfid_loop():
-    global _last_uid
+    global _last_uid, _person_present, _audio_played
     try:
         from mfrc522 import SimpleMFRC522
         import RPi.GPIO as GPIO
@@ -145,7 +128,9 @@ def _rfid_loop():
                 with _uid_lock:
                     _last_uid = str(uid)
                 print(f"Card tapped: {uid}")
-                stop_welcome_audio()
+                stop_audio()
+                _person_present = False
+                _audio_played = False
                 play_ding()
                 time.sleep(2)
                 with _uid_lock:

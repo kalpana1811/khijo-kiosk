@@ -46,9 +46,8 @@ def stop_audio():
 # ── Welcome audio loop ──
 def welcome_loop():
     global _welcome_speaking
-    while _welcome_speaking:
-        os.system('espeak "Tap your SafeBite card" --stdout | aplay - 2>/dev/null')
-        time.sleep(4)
+    os.system('espeak "Tap your SafeBite card" --stdout | aplay - 2>/dev/null')
+    _welcome_speaking = False
 
 def start_welcome_audio():
     global _welcome_speaking

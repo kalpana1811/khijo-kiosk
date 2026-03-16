@@ -11,37 +11,6 @@ from modules.recommender import get_recommendations, get_surprise, get_healthy_o
 
 SIMULATION = False  # True = Mac dev, False = Pi
 
-# ── LED Strip ──
-def _led_init():
-    try:
-        from rpi_ws281x import PixelStrip, Color
-        strip = PixelStrip(8, 18, 800000, 10, False, 255, 0)
-        strip.begin()
-        return strip
-    except Exception as e:
-        print(f"LED init error: {e}")
-        return None
-
-_strip = None
-
-def led_color(r, g, b):
-    global _strip
-    try:
-        if _strip is None:
-            _strip = _led_init()
-        if _strip:
-            from rpi_ws281x import Color
-            for i in range(8):
-                _strip.setPixelColor(i, Color(r, g, b))
-            _strip.show()
-    except Exception as e:
-        print(f"LED error: {e}")
-
-def led_yellow():  led_color(255, 100, 0)
-def led_green():   led_color(0, 255, 0)
-def led_red():     led_color(255, 0, 0)
-def led_off():     led_color(0, 0, 0)
-
 # ── Shared state ──
 _last_uid = None
 _uid_lock = threading.Lock()
@@ -190,7 +159,6 @@ def start_rfid_thread():
     if not SIMULATION:
         threading.Thread(target=_rfid_loop, daemon=True).start()
         threading.Thread(target=_ultrasonic_loop, daemon=True).start()
-        threading.Thread(target=lambda: (time.sleep(1), led_yellow()), daemon=True).start()
 
 def get_pending_uid():
     with _uid_lock:
@@ -208,8 +176,6 @@ def get_session(uid=None):
     uid = str(uid)
     user = lookup_user(uid, users)
     if user is None:
-        led_red()
-        threading.Thread(target=lambda: (time.sleep(3), led_yellow()), daemon=True).start()
         return {"status": "not_found", "uid": uid, "message": f"Card {uid} not registered"}
 
 

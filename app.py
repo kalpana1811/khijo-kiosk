@@ -40,6 +40,14 @@ def session_uid(uid):
         import traceback; traceback.print_exc()
         return jsonify({"status": "error", "error": str(e)})
 
+@app.route('/api/endsession', methods=['GET', 'POST'])
+def end_session():
+    try:
+        kiosk_engine.end_session()
+    except Exception as e:
+        print(f"End session error: {e}")
+    return jsonify({"status": "ok"})
+
 @app.route('/api/order', methods=['GET', 'POST'])
 def order_placed():
     try:

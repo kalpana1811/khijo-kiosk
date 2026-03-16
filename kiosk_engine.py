@@ -16,6 +16,7 @@ _last_uid = None
 _uid_lock = threading.Lock()
 _person_present = False
 _audio_played = False  # tracks if we already played audio for this person
+_session_active = False  # True when user is on menu screen
 
 # ── Audio helpers ──
 def speak_async(text):
@@ -106,7 +107,7 @@ def _ultrasonic_loop():
                         _audio_played = False
                         print(f"Person confirmed at {distance}cm")
 
-                    if _person_present and not _audio_played:
+                    if _person_present and not _audio_played and not _session_active:
                         _audio_played = True
                         speak_async("Tap your Bite card")
 
@@ -145,6 +146,7 @@ def _rfid_loop():
                 stop_audio()
                 _person_present = False
                 _audio_played = False
+                _session_active = False
                 play_ding()
                 time.sleep(2)
                 with _uid_lock:
@@ -180,9 +182,10 @@ def get_session(uid=None):
 
 
     # Prevent ultrasonic from triggering welcome audio during active session
-    global _audio_played, _person_present
+    global _audio_played, _person_present, _session_active
     _audio_played = True
     _person_present = True
+    _session_active = True
 
     safe_dishes, removed_dishes = filter_menu(user, menu)
     recs = [dish for dish, score in get_recommendations(user, menu, top_n=3)]
@@ -197,6 +200,12 @@ def get_session(uid=None):
         "safe_menu":       safe_dishes,
         "last_order":      last_order,
     }
+
+def end_session():
+    global _session_active, _audio_played, _person_present
+    _session_active = False
+    _audio_played = False
+    _person_present = False
 
 def group_by_category(safe_menu):
     grouped = {}

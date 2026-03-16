@@ -541,7 +541,7 @@ function renderMenu(el) {
 
   el.querySelector('#full-menu-btn').onclick = () => { state.screen='fullmenu'; state.fullMenuCat=null; render(); };
   el.querySelector('#cart-btn').onclick = () => { state.screen='cart'; render(); };
-  el.querySelector('#logout-btn').onclick = () => { state.session=null; state.cart=[]; state.screen='welcome'; render(); };
+  el.querySelector('#logout-btn').onclick = () => { fetch('/api/endsession'); state.session=null; state.cart=[]; state.screen='welcome'; render(); };
 
   // Add button handlers — rec row
   el.querySelectorAll('#rec-row .add-btn').forEach((btn, i) => {
@@ -626,7 +626,7 @@ function renderFullMenu(el) {
     </div>
 
     <!-- Grid of dishes -->
-    <div class="flex-1 overflow-y-auto scroll-hide p-4 pt-2">
+    <div id="menu-scroll" style="flex:1;min-height:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;" class="scroll-hide p-4 pt-2">
       <div class="grid grid-cols-4 gap-6">
         ${dishes.map((d,i) => {
           const safe = safeSet.has(d.name);

@@ -179,6 +179,11 @@ def get_session(uid=None):
         return {"status": "not_found", "uid": uid, "message": f"Card {uid} not registered"}
 
 
+    # Prevent ultrasonic from triggering welcome audio during active session
+    global _audio_played, _person_present
+    _audio_played = True
+    _person_present = True
+
     safe_dishes, removed_dishes = filter_menu(user, menu)
     recs = [dish for dish, score in get_recommendations(user, menu, top_n=3)]
     last_order = get_last_order(user, menu)

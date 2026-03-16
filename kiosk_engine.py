@@ -11,12 +11,42 @@ from modules.recommender import get_recommendations, get_surprise, get_healthy_o
 
 SIMULATION = False  # True = Mac dev, False = Pi
 
+# ── LED Strip ──
+def _led_init():
+    try:
+        from rpi_ws281x import PixelStrip, Color
+        strip = PixelStrip(8, 18, 800000, 10, False, 255, 0)
+        strip.begin()
+        return strip
+    except Exception as e:
+        print(f"LED init error: {e}")
+        return None
+
+_strip = None
+
+def led_color(r, g, b):
+    global _strip
+    try:
+        if _strip is None:
+            _strip = _led_init()
+        if _strip:
+            from rpi_ws281x import Color
+            for i in range(8):
+                _strip.setPixelColor(i, Color(r, g, b))
+            _strip.show()
+    except Exception as e:
+        print(f"LED error: {e}")
+
+def led_yellow():  led_color(255, 100, 0)
+def led_green():   led_color(0, 255, 0)
+def led_red():     led_color(255, 0, 0)
+def led_off():     led_color(0, 0, 0)
+
 # ── Shared state ──
 _last_uid = None
 _uid_lock = threading.Lock()
 _person_present = False
 _audio_played = False  # tracks if we already played audio for this person
-_session_active = False  # True when user is on menu screen
 
 # ── Audio helpers ──
 def speak_async(text):
@@ -70,8 +100,8 @@ def _ultrasonic_loop():
 
         consecutive_near = 0
         consecutive_far = 0
-        THRESHOLD = 50  # cm
-        CONFIRM = 1     # consecutive readings needed
+        THRESHOLD = 35  # cm
+        CONFIRM = 3     # consecutive readings needed
 
         while True:
             try:
@@ -107,7 +137,7 @@ def _ultrasonic_loop():
                         _audio_played = False
                         print(f"Person confirmed at {distance}cm")
 
-                    if _person_present and not _audio_played and not _session_active:
+                    if _person_present and not _audio_played:
                         _audio_played = True
                         speak_async("Tap your Bite card")
 
@@ -146,7 +176,6 @@ def _rfid_loop():
                 stop_audio()
                 _person_present = False
                 _audio_played = False
-                _session_active = False
                 play_ding()
                 time.sleep(2)
                 with _uid_lock:
@@ -161,6 +190,7 @@ def start_rfid_thread():
     if not SIMULATION:
         threading.Thread(target=_rfid_loop, daemon=True).start()
         threading.Thread(target=_ultrasonic_loop, daemon=True).start()
+        threading.Thread(target=lambda: (time.sleep(1), led_yellow()), daemon=True).start()
 
 def get_pending_uid():
     with _uid_lock:
@@ -178,14 +208,15 @@ def get_session(uid=None):
     uid = str(uid)
     user = lookup_user(uid, users)
     if user is None:
+        led_red()
+        threading.Thread(target=lambda: (time.sleep(3), led_yellow()), daemon=True).start()
         return {"status": "not_found", "uid": uid, "message": f"Card {uid} not registered"}
 
 
     # Prevent ultrasonic from triggering welcome audio during active session
-    global _audio_played, _person_present, _session_active
+    global _audio_played, _person_present
     _audio_played = True
     _person_present = True
-    _session_active = True
 
     safe_dishes, removed_dishes = filter_menu(user, menu)
     recs = [dish for dish, score in get_recommendations(user, menu, top_n=3)]
@@ -200,12 +231,6 @@ def get_session(uid=None):
         "safe_menu":       safe_dishes,
         "last_order":      last_order,
     }
-
-def end_session():
-    global _session_active, _audio_played, _person_present
-    _session_active = False
-    _audio_played = False
-    _person_present = False
 
 def group_by_category(safe_menu):
     grouped = {}

@@ -75,6 +75,11 @@ def _ultrasonic_loop():
         GPIO.setup(ECHO, GPIO.IN)
         print("Ultrasonic sensor started...")
         
+        consecutive_near = 0
+        consecutive_far = 0
+        THRESHOLD = 45  # cm
+        CONFIRM = 3     # consecutive readings needed
+
         while True:
             try:
                 GPIO.output(TRIG, False)
@@ -92,12 +97,27 @@ def _ultrasonic_loop():
                 
                 try:
                     distance = round((end - start) * 17150, 1)
-                    if distance < 100 and not _person_present:
+                    if distance > 1000:  # ignore noise/timeout readings
+                        time.sleep(0.5)
+                        continue
+
+                    if distance < THRESHOLD:
+                        consecutive_near += 1
+                        consecutive_far = 0
+                    else:
+                        consecutive_far += 1
+                        consecutive_near = 0
+
+                    if consecutive_near >= CONFIRM and not _person_present:
                         _person_present = True
-                        print(f"Person detected at {distance}cm — starting welcome audio")
+                        print(f"Person confirmed at {distance}cm")
                         start_welcome_audio()
-                    elif distance >= 100 and _person_present:
+
+                    if consecutive_far >= CONFIRM and _person_present:
                         _person_present = False
+                        print("Person left")
+                        stop_welcome_audio()
+
                 except:
                     pass
                     

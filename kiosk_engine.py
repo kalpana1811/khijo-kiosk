@@ -12,25 +12,32 @@ from modules.recommender import get_recommendations, get_surprise, get_healthy_o
 SIMULATION = False  # True = Mac dev, False = Pi
 
 
-# ── LED Strip (writes to /tmp/led_cmd, read by sudo led_controller.py) ──
+# ── LED (writes to /tmp/led_cmd for led_controller.py) ──
 def _led(color):
     try:
         with open('/tmp/led_cmd', 'w') as f:
             f.write(color)
-    except Exception as e:
-        print(f"LED cmd error: {e}")
+    except:
+        pass
+
+def led_blink_green():
+    def _blink():
+        for _ in range(3):
+            _led('green')
+            __import__('time').sleep(0.2)
+            _led('yellow')
+            __import__('time').sleep(0.2)
+        _led('yellow')
+    __import__('threading').Thread(target=_blink, daemon=True).start()
 
 def led_yellow(): _led('yellow')
-def led_green():  _led('green')
-def led_red():    _led('red')
-def led_off():    _led('off')
 
 # ── Shared state ──
 _last_uid = None
 _uid_lock = threading.Lock()
 _person_present = False
 _audio_played = False  # tracks if we already played audio for this person
-_session_active = False  # True when user is browsing menu
+_session_active = False  # True when user is on menu screen
 
 # ── Audio helpers ──
 def speak_async(text):
@@ -64,7 +71,6 @@ def play_order_beep():
         _gen_beep('/tmp/beep1.wav', 660, 0.2)
         _gen_beep('/tmp/beep2.wav', 880, 0.3)
         os.system('aplay /tmp/beep1.wav 2>/dev/null && aplay /tmp/beep2.wav 2>/dev/null')
-        led_yellow()
     threading.Thread(target=_play, daemon=True).start()
 
 def stop_audio():
@@ -85,8 +91,8 @@ def _ultrasonic_loop():
 
         consecutive_near = 0
         consecutive_far = 0
-        THRESHOLD = 35  # cm
-        CONFIRM = 3     # consecutive readings needed
+        THRESHOLD = 50  # cm
+        CONFIRM = 1     # consecutive readings needed
 
         while True:
             try:
@@ -162,7 +168,7 @@ def _rfid_loop():
                 _person_present = False
                 _audio_played = False
                 _session_active = False
-                led_green()
+                led_blink_green()
                 play_ding()
                 time.sleep(2)
                 with _uid_lock:
@@ -177,7 +183,7 @@ def start_rfid_thread():
     if not SIMULATION:
         threading.Thread(target=_rfid_loop, daemon=True).start()
         threading.Thread(target=_ultrasonic_loop, daemon=True).start()
-        threading.Thread(target=lambda: (__import__('time').sleep(1), led_yellow()), daemon=True).start()
+        threading.Thread(target=lambda: (time.sleep(1), led_yellow()), daemon=True).start()
 
 def get_pending_uid():
     with _uid_lock:
@@ -195,20 +201,15 @@ def get_session(uid=None):
     uid = str(uid)
     user = lookup_user(uid, users)
     if user is None:
-        led_red()
-        threading.Thread(target=lambda: (__import__('time').sleep(3), led_yellow()), daemon=True).start()
         return {"status": "not_found", "uid": uid, "message": f"Card {uid} not registered"}
 
 
     # Prevent ultrasonic from triggering welcome audio during active session
-    global _audio_played, _person_present
-    _audio_played = True
-    _person_present = True
-
     global _audio_played, _person_present, _session_active
     _audio_played = True
     _person_present = True
     _session_active = True
+
     safe_dishes, removed_dishes = filter_menu(user, menu)
     recs = [dish for dish, score in get_recommendations(user, menu, top_n=3)]
     last_order = get_last_order(user, menu)
@@ -228,7 +229,6 @@ def end_session():
     _session_active = False
     _audio_played = False
     _person_present = False
-    led_yellow()
 
 def group_by_category(safe_menu):
     grouped = {}

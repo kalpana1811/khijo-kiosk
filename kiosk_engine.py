@@ -71,7 +71,7 @@ def _ultrasonic_loop():
         consecutive_near = 0
         consecutive_far = 0
         THRESHOLD = 35  # cm
-        CONFIRM = 2     # consecutive readings needed
+        CONFIRM = 1     # consecutive readings needed
 
         while True:
             try:

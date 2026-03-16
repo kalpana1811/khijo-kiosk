@@ -305,7 +305,7 @@ function render() {
 function renderWelcome(el) {
   el.innerHTML = ` <div class="w-full h-full flex flex-col items-center justify-center" style="background:#F5F0E8;padding:20px 40px">
     <div class="flex flex-col items-center" style="margin-bottom:20px">
-      <div style="font-size:3rem;line-height:1;margin-bottom:6px">🐙</div>
+      <div style="font-size:3rem;line-height:1;margin-bottom:6px">🍜</div>
       <div style="font-size:2.25rem;font-weight:700;letter-spacing:-0.025em">KHIJO</div>
     </div>
     <div style="position:relative;width:200px;height:200px;margin-bottom:20px">
@@ -398,7 +398,7 @@ function renderGreeting(el) {
 // ─── HEADER (shared) ──────────────────────────────────────────────────────
 // Figma: flex items-center justify-between mb-8
 // Left: "Hi {name} 👋" text-3xl
-// Right: "🐙 KHIJO" text-6xl font-bold
+// Right: "🍜 KHIJO" text-6xl font-bold
 function headerHTML() {
   const name = state.session?.user?.name || '';
   return `
@@ -408,7 +408,7 @@ function headerHTML() {
       <span class="text-3xl">👋</span>
     </div>
     <div class="flex items-center gap-2">
-      <span class="text-5xl">🐙</span>
+      <span class="text-5xl">🍜</span>
       <span class="text-4xl font-bold tracking-tight">KHIJO</span>
     </div>
   </div>`;

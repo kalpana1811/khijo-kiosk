@@ -55,6 +55,9 @@ def start_welcome_audio():
         return
     _welcome_speaking = True
     threading.Thread(target=welcome_loop, daemon=True).start()
+    # Reset person_present so it can trigger again next time
+    global _person_present
+    _person_present = False
 
 def stop_welcome_audio():
     global _welcome_speaking
@@ -76,7 +79,7 @@ def _ultrasonic_loop():
         
         consecutive_near = 0
         consecutive_far = 0
-        THRESHOLD = 45  # cm
+        THRESHOLD = 35  # cm
         CONFIRM = 3     # consecutive readings needed
 
         while True:

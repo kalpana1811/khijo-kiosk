@@ -42,8 +42,6 @@ _session_active = False  # True when user is on menu screen
 # ── Audio helpers ──
 def speak_async(text):
     def _speak():
-        os.system('pkill -f "espeak" 2>/dev/null; pkill -f "aplay" 2>/dev/null')
-        time.sleep(0.3)
         os.system(f'espeak "{text}" --stdout | aplay - 2>/dev/null')
     threading.Thread(target=_speak, daemon=True).start()
 

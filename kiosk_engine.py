@@ -108,7 +108,7 @@ def _ultrasonic_loop():
 
                     if _person_present and not _audio_played:
                         _audio_played = True
-                        speak_async("Tap your SafeBite card")
+                        speak_async("Tap your Bite card")
 
                     # Person left - reset everything
                     if consecutive_far >= CONFIRM and _person_present:

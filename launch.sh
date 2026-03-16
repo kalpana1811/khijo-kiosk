@@ -1,10 +1,19 @@
 #!/bin/bash
 pkill -f "python3 app.py"
+pkill -f "led_controller"
 pkill chromium
 sleep 1
 cd ~/khijo-kiosk
+
+# Start LED controller with sudo
+sudo python3 led_controller.py &
+sleep 1
+
+# Start Flask server
 python3 app.py &
 sleep 3
+
+# Start Chromium kiosk
 DISPLAY=:0 chromium-browser \
   --kiosk \
   --touch-events=enabled \

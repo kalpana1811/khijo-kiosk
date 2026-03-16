@@ -11,6 +11,20 @@ from modules.recommender import get_recommendations, get_surprise, get_healthy_o
 
 SIMULATION = False  # True = Mac dev, False = Pi
 
+
+# ── LED Strip (writes to /tmp/led_cmd, read by sudo led_controller.py) ──
+def _led(color):
+    try:
+        with open('/tmp/led_cmd', 'w') as f:
+            f.write(color)
+    except Exception as e:
+        print(f"LED cmd error: {e}")
+
+def led_yellow(): _led('yellow')
+def led_green():  _led('green')
+def led_red():    _led('red')
+def led_off():    _led('off')
+
 # ── Shared state ──
 _last_uid = None
 _uid_lock = threading.Lock()
@@ -145,6 +159,7 @@ def _rfid_loop():
                 stop_audio()
                 _person_present = False
                 _audio_played = False
+                led_green()
                 play_ding()
                 time.sleep(2)
                 with _uid_lock:
@@ -159,6 +174,7 @@ def start_rfid_thread():
     if not SIMULATION:
         threading.Thread(target=_rfid_loop, daemon=True).start()
         threading.Thread(target=_ultrasonic_loop, daemon=True).start()
+        threading.Thread(target=lambda: (__import__('time').sleep(1), led_yellow()), daemon=True).start()
 
 def get_pending_uid():
     with _uid_lock:
@@ -176,6 +192,8 @@ def get_session(uid=None):
     uid = str(uid)
     user = lookup_user(uid, users)
     if user is None:
+        led_red()
+        threading.Thread(target=lambda: (__import__('time').sleep(3), led_yellow()), daemon=True).start()
         return {"status": "not_found", "uid": uid, "message": f"Card {uid} not registered"}
 
 

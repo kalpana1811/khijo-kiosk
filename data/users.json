@@ -82,30 +82,23 @@
       "Takoyaki"
     ]
   },
-  "100005": {
-    "name": "Liam Chen",
+  "37500738142": {
+    "name": "Kalpana",
     "age": 23,
     "allergies": [
-      "soy"
+      ""
     ],
     "avoid": [
-      "chicken",
-      "grapefruit"
+      
     ],
     "dietary_preferences": [
-      "low calorie"
+      "vegetarian"
     ],
     "order_history": [
-      "Spicy Beef Udon",
-      "Beef Sliced Yakisoba",
-      "Spicy Beef Ramen",
-      "Beef Slice Teriyaki Rice",
-      "Beef Curry Rice",
-      "Spicy Beef Udon",
-      "Beef Sliced Noodle Soup",
-      "Beef Slice Teriyaki Rice",
-      "Spicy Beef Ramen",
-      "Beef Curry Rice"
+      "Spring Rolls",
+      "Apple Gyoza",
+      "Tofu Katsu Noodle Soup",
+      "Pumpkin Teriyaki Rice"
     ]
   },
   "35312291641": {

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=1024, height=600, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>KHIJO</title>
 <style id="tw">
+  
 *{box-sizing:border-box;margin:0;padding:0}
 .flex{display:flex}.grid{display:grid}.hidden{display:none}.relative{position:relative}.absolute{position:absolute}.fixed{position:fixed}.inset-0{inset:0}
 .flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.min-w-0{min-width:0}
@@ -49,6 +50,9 @@
 .hover\:bg-red-50:hover{background-color:#fef2f2}.hover\:text-gray-800:hover{color:#1f2937}.hover\:scale-105:hover{transform:scale(1.05)}
 .hover\:bg-\[\#E0D8CC\]:hover{background-color:#E0D8CC}
 img{-webkit-user-drag:none;pointer-events:none}
+button{-webkit-tap-highlight-color:transparent;outline:none}
+button:focus{outline:none}
+button:active{outline:none}
 </style>
 <style>
   * { box-sizing: border-box; -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important; }
@@ -528,7 +532,7 @@ function renderMenu(el) {
     <!-- Scrollable content -->
     <div class="flex-1 overflow-y-auto scroll-hide px-6 pt-2 pb-2" id="menu-vert">
       <!-- Recommended -->
-      <h2 class="text-xl mb-2">Recommended for you <span style="font-size:0.75rem;font-weight:400;color:#9ca3af">(based on previous orders)</span></h2>
+      <h2 class="text-xl mb-2">Recommended for you <span style="font-size:0.75rem;font-weight:400;color:#5C3D1E;font-style:italic">(based on previous orders)</span></h2>
       <div class="flex gap-4 overflow-x-auto scroll-hide pb-4" id="rec-row">
         ${recs.map((d,i) => menuCardHTML(d, i, true)).join('')}
       </div>

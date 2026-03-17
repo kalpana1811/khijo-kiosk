@@ -528,7 +528,7 @@ function renderMenu(el) {
     <!-- Scrollable content -->
     <div class="flex-1 overflow-y-auto scroll-hide px-6 pt-2 pb-2" id="menu-vert">
       <!-- Recommended -->
-      <h2 class="text-xl mb-2">Recommended for you</h2>
+      <h2 class="text-xl mb-2">Recommended for you <span style="font-size:0.75rem;font-weight:400;color:#9ca3af">(based on previous orders)</span></h2>
       <div class="flex gap-4 overflow-x-auto scroll-hide pb-4" id="rec-row">
         ${recs.map((d,i) => menuCardHTML(d, i, true)).join('')}
       </div>

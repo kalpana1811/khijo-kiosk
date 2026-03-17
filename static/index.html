@@ -620,7 +620,8 @@ function renderFullMenu(el) {
         Back
       </button>
       <button id="cart-btn2" class="relative px-5 py-2 border-2 border-gray-900 rounded-lg hover:bg-gray-100 transition-colors font-medium">
-        Cart ${cnt>0?`<span class="ml-1 bg-gray-900 text-white text-xs px-1.5 py-0.5 rounded-full">${cnt}</span>`:''}
+        Cart
+        <span class="absolute -top-2 -right-2 bg-gray-900 text-white text-xs w-6 h-6 rounded-full items-center justify-center" style="display:${cnt > 0 ? 'flex' : 'none'}">${cnt}</span>
       </button>
     </div>
 
@@ -693,7 +694,7 @@ function renderCart(el) {
         <!-- Info -->
         <div class="flex-1">
           <h3 class="text-xl font-medium mb-1">${dish.name}</h3>
-          <button class="text-sm text-gray-600 underline hover:text-gray-800 view-ingr" data-name="${dish.name}">View Ingredients</button>
+          <button class="text-sm text-gray-600 border border-gray-400 px-2 py-0.5 rounded hover:bg-white hover:text-gray-800 view-ingr" data-name="${dish.name}">View Ingredients</button>
         </div>
         <!-- Price + Qty -->
         <div class="flex items-center gap-6">

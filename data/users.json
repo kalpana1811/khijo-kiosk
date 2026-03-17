@@ -66,31 +66,20 @@
       "Beef Slice Halal Rice"
     ]
   },
-  "100004": {
-    "name": "Priya Nair",
-    "age": 19,
+  "4328719364": {
+    "name": "Edwin",
+    "age": 26,
     "allergies": [
-      "fish",
-      "tree nuts"
+      "Prawn"
     ],
     "avoid": [
-      "beef",
-      "pork"
     ],
     "dietary_preferences": [
-      "vegetarian"
     ],
     "order_history": [
-      "Tofu Katsu Noodle Soup",
-      "Pumpkin Yakisoba",
-      "Tofu Teriyaki Rice",
-      "Veg Gyoza Yakisoba",
-      "Tofu Katsu Curry Rice",
-      "Pumpkin Curry Rice",
-      "Veg Tempura Teriyaki Rice",
-      "Tofu Katsu Yakisoba",
-      "Vegetable Gyoza Noodle Soup",
-      "Pumpkin Teriyaki Rice"
+      "Grilled Chicken Teriyaki + 2 Veg Gyoza + Random Drink",
+      "Spicy Beef Momo",
+      "Takoyaki"
     ]
   },
   "100005": {

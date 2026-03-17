@@ -188,10 +188,10 @@ const DISH_PHOTOS = {
   "Veg Gyoza Curry Rice":            "https://images.pexels.com/photos/31872335/pexels-photo-31872335.jpeg?w=400&h=300&fit=crop&q=100",
   "Beef Curry Rice":                 "https://images.pexels.com/photos/31299650/pexels-photo-31299650.jpeg?w=400&h=300&fit=crop&q=100",
   "Seafood Tempura Curry Rice":      "https://images.pexels.com/photos/15985541/pexels-photo-15985541.jpeg?w=400&h=300&fit=crop&q=100",
-  "Salmon Katsu Curry Rice":         "https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=400&h=300&fit=crop&q=100",
-  "Grilled Unagi Eel Rice":          "https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=400&h=300&fit=crop&q=100",
-  "Grilled Chicken Teriyaki Rice":   "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop&q=100",
-  "Halal Chicken Katsu Curry Rice":  "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=300&fit=crop&q=100",
+  "Salmon Katsu Curry Rice":         "https://images.pexels.com/photos/17320991/pexels-photo-17320991.jpeg?w=400&h=300&fit=crop&q=100",
+  "Grilled Unagi Eel Rice":          "https://images.pexels.com/photos/10810653/pexels-photo-10810653.jpeg?w=400&h=300&fit=crop&q=100",
+  "Grilled Chicken Teriyaki Rice":   "https://images.pexels.com/photos/28442544/pexels-photo-28442544.jpeg?w=400&h=300&fit=crop&q=100",
+  "Halal Chicken Katsu Curry Rice":  "https://images.pexels.com/photos/30507472/pexels-photo-30507472.jpeg?w=400&h=300&fit=crop&q=100",
 
   // Momo Buns
   "Japanese Sausage Momo":   "https://images.pexels.com/photos/28445593/pexels-photo-28445593.jpeg?w=400&h=300&fit=crop&q=100",
@@ -557,7 +557,7 @@ function renderMenu(el) {
       btn.textContent = '✓ Added';
       btn.style.background = '#16a34a';
       updateCartBadge(el);
-      setTimeout(() => { btn.textContent = '+ Add'; btn.style.background = ''; }, 900);
+      setTimeout(() => { btn.textContent = '+ Add'; btn.style.background = '#111827'; }, 900);
     };
   });
 
@@ -569,7 +569,7 @@ function renderMenu(el) {
       btn.textContent = '✓ Added';
       btn.style.background = '#16a34a';
       updateCartBadge(el);
-      setTimeout(() => { btn.textContent = '+ Add'; btn.style.background = ''; }, 900);
+      setTimeout(() => { btn.textContent = '+ Add'; btn.style.background = '#111827'; }, 900);
     };
   });
   } catch(err) {
@@ -658,7 +658,14 @@ function renderFullMenu(el) {
         cartAdd(d);
         btn.textContent = '✓ Added';
         btn.style.background = '#16a34a';
-        setTimeout(() => { btn.textContent = '+ Add'; btn.style.background = ''; render(); }, 900);
+        // Update badge without full re-render to avoid glitch
+        const badge = el.querySelector('#cart-btn2 span');
+        const newCnt = cartCount();
+        if (badge) {
+          badge.textContent = newCnt;
+          badge.style.display = newCnt > 0 ? 'flex' : 'none';
+        }
+        setTimeout(() => { btn.textContent = '+ Add'; btn.style.background = '#111827'; }, 900);
       }
     };
   });

@@ -352,19 +352,21 @@ function renderWelcome(el) {
 }
 
 async function pollRFID() {
-  if (state.screen !== 'welcome') { state.rfidPolling = false; return; }
   try {
     const sess = await fetchSession();
-    // Only advance if we got a real card scan (status ok AND uid looks like real RFID)
     if (sess && sess.status === 'ok' && sess.uid) {
-      state.rfidPolling = false;
-      state.session = sess;
-      goGreeting();
-      return;
+      if (state.session && state.session.uid !== sess.uid) {
+        fetch('/api/endsession');
+        state.cart = [];
+      }
+      if (!state.session || state.session.uid !== sess.uid) {
+        state.rfidPolling = false;
+        state.session = sess;
+        goGreeting();
+        return;
+      }
     }
-  } catch(e) {
-    // Network error or server error — just keep polling
-  }
+  } catch(e) {}
   setTimeout(pollRFID, 1000);
 }
 

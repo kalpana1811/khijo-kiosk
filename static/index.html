@@ -355,15 +355,13 @@ async function pollRFID() {
   try {
     const sess = await fetchSession();
     if (sess && sess.status === 'ok' && sess.uid) {
-      if (state.session && state.session.uid !== sess.uid) {
-        fetch('/api/endsession');
+      const currentUid = state.session && state.session.uid;
+      if (currentUid !== sess.uid) {
+        // New card tapped - reset and load new session
+        if (currentUid) fetch('/api/endsession');
         state.cart = [];
-      }
-      if (!state.session || state.session.uid !== sess.uid) {
-        state.rfidPolling = false;
         state.session = sess;
         goGreeting();
-        return;
       }
     }
   } catch(e) {}

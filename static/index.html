@@ -103,8 +103,6 @@ img{-webkit-user-drag:none;pointer-events:none}
   .dot2 { animation: dot-bounce 1.2s ease-in-out 0.2s infinite; }
   .dot3 { animation: dot-bounce 1.2s ease-in-out 0.4s infinite; }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init("EEPW6Ho1-z2olPtvX");</script>
 </head>
 <body>
 <div id="app"></div>
@@ -770,6 +768,7 @@ function renderCart(el) {
   if (state.cart.length > 0) {
     el.querySelector('#place-order-btn').onclick = () => {
       state.orderNumber = String(Math.floor(10000+Math.random()*90000));
+      state.lastCart = [...state.cart];
       state.cart = [];
       state.screen = 'orderPlaced'; fetch('/api/order');
       render();
@@ -987,141 +986,69 @@ function showIngredientsModal(dish) {
   overlay.onclick = (e) => { if(e.target===overlay) overlay.remove(); };
 }
 
-// ─── ORDER PLACED SCREEN ──────────────────────────────────────────────────────
+// ─── ORDER PLACED SCREEN ──────────────────────────────────────────────────
+// Exact match to OrderPlacedScreen.tsx:
+// flex flex-col p-8
+// header, flex-1 flex flex-col items-center justify-center
+// w-32 h-32 rounded-full bg-green-500, Check w-20 h-20 text-white strokeWidth=3
+// "Order Placed!" text-5xl font-medium
+// order number text-2xl text-gray-700
+// Print Receipt px-12 py-4 bg-gray-900 rounded-xl text-xl
+// "Bill sent to your mobile number" text-lg text-gray-600
 function renderOrderPlaced(el) {
   const name = state.session?.user?.name || '';
-  fetch('/api/order');
+  el.innerHTML = `
+  <div class="w-full min-h-full flex flex-col p-8">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-12">
+      <div class="flex items-center gap-2">
+        <h1 class="text-3xl">Hi ${name}</h1>
+        <span class="text-3xl">👋</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span style="font-size:2rem">🍜</span>
+        <span style="font-size:1.75rem;font-weight:700">KHIJO</span>
+      </div>
+    </div>
 
-  // Screen 1: Order placed + two options
-  function showOrderScreen() {
-    el.innerHTML = `
-    <div class="w-full h-full flex flex-col bg-[#F5F0E8]">
-      <div class="flex items-center justify-between px-4 pt-2 pb-0">
-        <div class="flex items-center gap-2">
-          <h1 style="font-size:1.5rem;font-weight:600">Hi ${name} 👋</h1>
-        </div>
-        <div class="flex items-center gap-2">
-          <span style="font-size:2rem">🐙</span>
-          <span style="font-size:1.75rem;font-weight:700">KHIJO</span>
-        </div>
+    <!-- Success -->
+    <div class="flex-1 flex flex-col items-center justify-center">
+      <!-- Green circle w-32 h-32 -->
+      <div class="w-32 h-32 rounded-full bg-green-500 flex items-center justify-center mb-8 shadow-lg">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
       </div>
 
-      <div class="flex-1 flex flex-col items-center justify-center" style="gap:20px;padding:20px">
-        <div class="w-32 h-32 rounded-full bg-green-500 flex items-center justify-center shadow-lg">
-          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-        </div>
+      <h2 class="text-5xl font-medium mb-4">Order Placed!</h2>
+      <p class="text-2xl text-gray-700 mb-12">Order no: <span class="font-medium">${state.orderNumber}</span></p>
 
-        <h2 style="font-size:2rem;font-weight:600">Order Placed!</h2>
-        <p style="font-size:1.2rem;color:#4b5563">Order no: <strong>${state.orderNumber}</strong></p>
-
-        <p style="font-size:1rem;color:#6b7280;margin-top:8px">Would you like a receipt?</p>
-
-        <div style="display:flex;gap:16px;margin-top:8px">
-          <button id="yes-receipt-btn" style="padding:14px 32px;background:#8B6F47;color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer">
-            Yes, send receipt
-          </button>
-          <button id="no-receipt-btn" style="padding:14px 32px;background:#111827;color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer">
-            No thanks
-          </button>
-        </div>
-      </div>
-    </div>`;
-
-    el.querySelector('#yes-receipt-btn').onclick = () => showEmailScreen();
-    el.querySelector('#no-receipt-btn').onclick = () => showThankYouScreen();
-  }
-
-  // Screen 2: Email input
-  function showEmailScreen() {
-    el.innerHTML = `
-    <div class="w-full h-full flex flex-col items-center justify-center bg-[#F5F0E8]" style="gap:20px;padding:40px">
-      <span style="font-size:3rem">📧</span>
-      <h2 style="font-size:1.75rem;font-weight:600">Enter your email</h2>
-      <p style="font-size:1rem;color:#6b7280">We'll send your receipt there</p>
-
-      <input id="receipt-email" type="email" placeholder="your@email.com"
-        style="width:100%;max-width:380px;padding:14px 16px;border:2px solid #d1d5db;border-radius:10px;font-size:1rem;outline:none;-webkit-user-select:text;user-select:text;background:white"
-        onclick="this.focus()" />
-
-      <p id="receipt-status" style="font-size:0.9rem;color:#6b7280;min-height:20px"></p>
-
-      <div style="display:flex;gap:12px">
-        <button id="send-btn" style="padding:14px 32px;background:#8B6F47;color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer">
-          Send Receipt
-        </button>
-        <button id="skip-btn" style="padding:14px 24px;background:#e5e7eb;color:#374151;border:none;border-radius:12px;font-size:1rem;cursor:pointer">
-          Skip
-        </button>
-      </div>
-    </div>`;
-
-    el.querySelector('#skip-btn').onclick = () => showThankYouScreen();
-    el.querySelector('#send-btn').onclick = () => {
-      const email = el.querySelector('#receipt-email').value.trim();
-      const status = el.querySelector('#receipt-status');
-      if (!email || !email.includes('@')) {
-        status.textContent = 'Please enter a valid email address';
-        status.style.color = '#dc2626';
-        return;
-      }
-      status.textContent = 'Sending...';
-      status.style.color = '#6b7280';
-      const items = (state.cart || []).map(i => i.dish.name + ' x' + i.qty + ' - £' + (i.dish.price * i.qty).toFixed(2)).join('\n');
-      const total = (state.cart || []).reduce((s,i) => s + i.dish.price * i.qty, 0).toFixed(2);
-      emailjs.send('service_fekefrj', 'template_gaydd9o', {
-        to_email: email,
-        order_number: state.orderNumber || 'N/A',
-        items: items,
-        total: total
-      }).then(() => {
-        showThankYouScreen(email);
-      }).catch(err => {
-        status.textContent = 'Failed to send. Try again.';
-        status.style.color = '#dc2626';
-      });
-    };
-  }
-
-  // Screen 3: Thank you
-  function showThankYouScreen(email) {
-    el.innerHTML = `
-    <div class="w-full h-full flex flex-col items-center justify-center bg-[#F5F0E8]" style="gap:16px">
-      <span style="font-size:4rem">🐙</span>
-      <h2 style="font-size:2rem;font-weight:700">Thank you!</h2>
-      ${email ? '<p style="font-size:1rem;color:#6b7280">Receipt sent to ' + email + '</p>' : ''}
-      <p style="font-size:1rem;color:#6b7280">Enjoy your meal!</p>
-      <button id="next-btn" style="margin-top:16px;padding:14px 40px;background:#111827;color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer">
-        Next Customer
+      <button id="print-btn" class="px-12 py-4 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-colors text-xl mb-6 font-medium">
+        Print Receipt
       </button>
-      <p id="countdown" style="font-size:0.85rem;color:#9ca3af;margin-top:8px"></p>
-    </div>`;
 
-    el.querySelector('#next-btn').onclick = () => {
-      fetch('/api/endsession');
-      state.session = null; state.cart = []; state.screen = 'welcome'; render();
-    };
+      <p class="text-lg text-gray-600">Bill sent to your mobile number</p>
 
-    let secs = 10;
-    const cd = el.querySelector('#countdown');
-    const tick = () => {
-      if (!cd || !cd.isConnected) return;
-      if (secs <= 0) {
-        fetch('/api/endsession');
-        state.session = null; state.cart = []; state.screen = 'welcome'; render();
-        return;
-      }
-      cd.textContent = 'Returning to home in ' + secs + 's...';
-      secs--;
-      setTimeout(tick, 1000);
-    };
-    tick();
-  }
+      <p id="countdown" class="text-sm text-gray-400 mt-8"></p>
+    </div>
+  </div>`;
 
-  showOrderScreen();
+  el.querySelector('#print-btn').onclick = () => {
+    state.session = null; state.screen = 'welcome'; render();
+  };
+
+  // Countdown
+  let secs = 8;
+  const cd = el.querySelector('#countdown');
+  const tick = () => {
+    if (!cd || !cd.isConnected) return;
+    if (secs <= 0) { state.screen='welcome'; state.session=null; render(); return; }
+    cd.textContent = 'Returning to home in ' + secs + 's...';
+    secs--;
+    setTimeout(tick, 1000);
+  };
+  tick();
 }
-
 
 // ─── Category helpers ─────────────────────────────────────────────────────
 function catColor(cat) {

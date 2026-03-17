@@ -392,32 +392,6 @@
         "diet_tag": "vegan",
         "halal": true
       },
-      "Y003": {
-        "name": "Halal Chicken Yakisoba",
-        "price": 11.4,
-        "allergens": [
-          "gluten",
-          "soy"
-        ],
-        "avoid_tags": [
-          "chicken"
-        ],
-        "diet_tag": "non-vegetarian",
-        "halal": true
-      },
-      "Y004": {
-        "name": "Chilli Chicken Yakisoba",
-        "price": 11.4,
-        "allergens": [
-          "gluten",
-          "soy"
-        ],
-        "avoid_tags": [
-          "chicken"
-        ],
-        "diet_tag": "non-vegetarian",
-        "halal": false
-      },
       "Y005": {
         "name": "Pork Meatball Yakisoba",
         "price": 10.9,
@@ -477,20 +451,6 @@
         "diet_tag": "non-vegetarian",
         "halal": false
       },
-      "Y009": {
-        "name": "Chicken Gyoza Yakisoba",
-        "price": 10.4,
-        "allergens": [
-          "gluten",
-          "soy",
-          "eggs"
-        ],
-        "avoid_tags": [
-          "chicken"
-        ],
-        "diet_tag": "non-vegetarian",
-        "halal": false
-      },
       "Y010": {
         "name": "Tofu Katsu Yakisoba",
         "price": 10.4,
@@ -512,33 +472,6 @@
         ],
         "avoid_tags": [
           "beef"
-        ],
-        "diet_tag": "non-vegetarian",
-        "halal": false
-      },
-      "Y012": {
-        "name": "Grilled Chicken Yakisoba",
-        "price": 10.4,
-        "allergens": [
-          "gluten",
-          "soy"
-        ],
-        "avoid_tags": [
-          "chicken"
-        ],
-        "diet_tag": "non-vegetarian",
-        "halal": false
-      },
-      "Y013": {
-        "name": "Chicken Katsu Yakisoba",
-        "price": 10.4,
-        "allergens": [
-          "gluten",
-          "soy",
-          "eggs"
-        ],
-        "avoid_tags": [
-          "chicken"
         ],
         "diet_tag": "non-vegetarian",
         "halal": false

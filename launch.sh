@@ -17,6 +17,7 @@ sleep 3
 DISPLAY=:0 chromium-browser \
   --kiosk \
   --touch-events=enabled \
+  --enable-virtual-keyboard \
   --enable-smooth-scrolling \
   --disable-pinch \
   --noerrdialogs \

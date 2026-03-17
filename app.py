@@ -48,6 +48,14 @@ def end_session():
         print(f"End session error: {e}")
     return jsonify({"status": "ok"})
 
+@app.route('/api/nextcustomer', methods=['GET', 'POST'])
+def next_customer():
+    try:
+        kiosk_engine.play_next_ting()
+    except Exception as e:
+        print(f"Next ting error: {e}")
+    return jsonify({"status": "ok"})
+
 @app.route('/api/order', methods=['GET', 'POST'])
 def order_placed():
     try:

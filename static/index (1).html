@@ -55,7 +55,8 @@ button:focus{outline:none}
 button:active{outline:none}
 </style>
 <style>
-  * { box-sizing: border-box; -webkit-user-select: none !important; user-select: none !important; -webkit-touch-callout: none !important; }
+  * { box-sizing: border-box; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+input, textarea { -webkit-user-select: text !important; user-select: text !important; touch-action: auto !important; pointer-events: auto !important; }
   body { margin: 0; padding: 0; background: #F5F0E8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #F5F0E8; }
   * { box-sizing: border-box; }
@@ -1096,6 +1097,7 @@ function renderOrderPlaced(el) {
       <p id="countdown" style="font-size:0.85rem;color:#9ca3af;margin-top:8px"></p>
     </div>`;
     el.querySelector('#next-btn').onclick = () => {
+      fetch('/api/nextcustomer');
       fetch('/api/endsession');
       state.session = null; state.cart = []; state.screen = 'welcome'; render();
     };

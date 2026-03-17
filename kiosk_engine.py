@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from modules.filter import load_data, filter_menu
 from modules.recommender import get_recommendations, get_surprise, get_healthy_options, get_last_order
 
-SIMULATION = False  # True = Mac dev, False = Pi
+SIMULATION = True  # True = Mac dev, False = Pi
 
 
 # ── LED (writes to /tmp/led_cmd for led_controller.py) ──
@@ -61,6 +61,13 @@ def play_ding():
     def _play():
         _gen_beep('/tmp/ding.wav', 880, 0.4)
         os.system('aplay /tmp/ding.wav 2>/dev/null')
+    threading.Thread(target=_play, daemon=True).start()
+
+def play_next_ting():
+    """Short ting for next customer"""
+    def _play():
+        _gen_beep('/tmp/ting.wav', 1046, 0.25)
+        os.system('aplay /tmp/ting.wav 2>/dev/null')
     threading.Thread(target=_play, daemon=True).start()
 
 def play_order_beep():

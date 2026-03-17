@@ -119,31 +119,22 @@
       "Beef Curry Rice"
     ]
   },
-  "100006": {
-    "name": "Fatima Al-Rashid",
+  "35312291641": {
+    "name": "Srepathy C",
     "age": 20,
     "allergies": [
-      "dairy",
-      "eggs"
+      "dairy"
     ],
     "avoid": [
       "pork"
     ],
     "dietary_preferences": [
-      "halal",
-      "vegan"
     ],
     "order_history": [
-      "Vegetable Gyoza Noodle Soup",
-      "Tofu Katsu Momo",
-      "Pumpkin Teriyaki Rice",
-      "Veg Gyoza Curry Rice",
-      "Tofu Teriyaki Rice",
-      "Pumpkin Yakisoba",
-      "Vegetable Gyoza Noodle Soup",
-      "Veg Tempura Teriyaki Rice",
-      "Tofu Katsu Curry Rice",
-      "Pumpkin Curry Rice"
+      "Spicy Beef Ramen + Tea Egg + Random Drink",
+      "Chilli Chicken + Tea Egg + Random Drink",
+      "Prawn Katsu Yakisoba",
+      "Spicy Beef Momo"
     ]
   },
   "100007": {

@@ -84,7 +84,7 @@ def stop_audio():
 
 # ── Ultrasonic sensor loop ──
 def _ultrasonic_loop():
-    global _person_present, _audio_played
+    global _person_present, _audio_played, _session_active, _cooldown_until
     try:
         import RPi.GPIO as GPIO
         TRIG = 23

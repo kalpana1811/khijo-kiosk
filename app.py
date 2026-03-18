@@ -56,16 +56,6 @@ def next_customer():
         print(f"Next ting error: {e}")
     return jsonify({"status": "ok"})
 
-@app.route('/api/keyboard/show', methods=['GET', 'POST'])
-def keyboard_show():
-    os.system('DISPLAY=:0 onboard &')
-    return jsonify({"status": "ok"})
-
-@app.route('/api/keyboard/hide', methods=['GET', 'POST'])
-def keyboard_hide():
-    os.system('pkill onboard 2>/dev/null')
-    return jsonify({"status": "ok"})
-
 @app.route('/api/order', methods=['GET', 'POST'])
 def order_placed():
     try:

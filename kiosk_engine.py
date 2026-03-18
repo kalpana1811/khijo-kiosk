@@ -140,7 +140,7 @@ def _ultrasonic_loop():
 
                 if _person_present and not _audio_played and not _session_active and time.time() > _cooldown_until:
                     _audio_played = True
-                    _cooldown_until = time.time() + 8
+                    _cooldown_until = time.time() + 5  # 5 second cooldown between speaks
                     print(f"Speaking: Tap your Bite card")
                     speak_async("Tap your Bite card")
                 elif _person_present and not _audio_played:
@@ -204,6 +204,7 @@ def lookup_user(uid, users):
     return users.get(str(uid), None)
 
 def get_session(uid=None):
+    global _audio_played, _person_present, _session_active
     users, menu = load_data()
     if uid is None:
         uid = get_pending_uid()
@@ -214,9 +215,7 @@ def get_session(uid=None):
     if user is None:
         return {"status": "not_found", "uid": uid, "message": f"Card {uid} not registered"}
 
-
-    # Prevent ultrasonic from triggering welcome audio during active session
-    global _audio_played, _person_present, _session_active
+    # Only now set session active - user successfully logged in
     _audio_played = True
     _person_present = True
     _session_active = True
@@ -240,7 +239,7 @@ def end_session():
     _session_active = False
     _audio_played = False
     _person_present = False
-    _cooldown_until = time.time() + 3  # 3 second pause after session ends
+    _cooldown_until = 0  # No pause - ready for next customer immediately
 
 def group_by_category(safe_menu):
     grouped = {}

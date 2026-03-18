@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from modules.filter import load_data, filter_menu
 from modules.recommender import get_recommendations, get_surprise, get_healthy_options, get_last_order
 
-SIMULATION = False  # True = Mac dev, False = Pi
+SIMULATION = True  # True = Mac dev, False = Pi
 
 
 # ── LED (writes to /tmp/led_cmd for led_controller.py) ──
@@ -84,7 +84,7 @@ def stop_audio():
 
 # ── Ultrasonic sensor loop ──
 def _ultrasonic_loop():
-    global _person_present, _audio_played, _session_active, _cooldown_until
+    global _person_present, _audio_played
     try:
         import RPi.GPIO as GPIO
         TRIG = 23
@@ -128,30 +128,29 @@ def _ultrasonic_loop():
                         consecutive_far += 1
                         consecutive_near = 0
 
+                    # Person arrived - play audio ONCE
+                    if consecutive_near >= CONFIRM and not _person_present:
+                        _person_present = True
+                        _audio_played = False
+                        print(f"Person confirmed at {distance}cm")
+
+                    if _person_present and not _audio_played and not _session_active and time.time() > _cooldown_until:
+                        _audio_played = True
+                        _cooldown_until = time.time() + 8
+                        print(f"Speaking: Tap your Bite card (session_active={_session_active})")
+                        speak_async("Tap your Bite card")
+                    elif _person_present and not _audio_played:
+                        print(f"Blocked: audio_played={_audio_played} session_active={_session_active} cooldown={max(0,round(_cooldown_until-time.time(),1))}s")
+
+                    # Person left - reset everything
+                    if consecutive_far >= CONFIRM and _person_present:
+                        _person_present = False
+                        _audio_played = False
+                        consecutive_near = 0
+                        print("Person left")
+
                 except:
-                    time.sleep(0.5)
-                    continue
-
-                # Person arrived - play audio ONCE (moved outside try block)
-                if consecutive_near >= CONFIRM and not _person_present:
-                    _person_present = True
-                    _audio_played = False
-                    print(f"Person confirmed at {distance}cm")
-
-                if _person_present and not _audio_played and not _session_active and time.time() > _cooldown_until:
-                    _audio_played = True
-                    _cooldown_until = time.time() + 8
-                    print(f"Speaking: Tap your Bite card")
-                    speak_async("Tap your Bite card")
-                elif _person_present and not _audio_played:
-                    print(f"Blocked: session_active={_session_active} cooldown={max(0,round(_cooldown_until-time.time(),1))}s")
-
-                # Person left - reset everything
-                if consecutive_far >= CONFIRM and _person_present:
-                    _person_present = False
-                    _audio_played = False
-                    consecutive_near = 0
-                    print("Person left")
+                    pass
 
                 time.sleep(0.5)
             except Exception as e:
@@ -162,7 +161,7 @@ def _ultrasonic_loop():
 
 # ── RFID background thread ──
 def _rfid_loop():
-    global _last_uid, _person_present, _audio_played, _session_active
+    global _last_uid, _person_present, _audio_played
     try:
         from mfrc522 import SimpleMFRC522
         import RPi.GPIO as GPIO

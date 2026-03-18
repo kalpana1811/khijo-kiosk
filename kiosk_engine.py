@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from modules.filter import load_data, filter_menu
 from modules.recommender import get_recommendations, get_surprise, get_healthy_options, get_last_order
 
-SIMULATION = True  # True = Mac dev, False = Pi
+SIMULATION = False  # True = Mac dev, False = Pi
 
 
 # ── LED (writes to /tmp/led_cmd for led_controller.py) ──

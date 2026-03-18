@@ -1044,25 +1044,12 @@ function renderOrderPlaced(el) {
   }
 
   function showEmailScreen() {
-    el.innerHTML = `
-    <div class="w-full h-full flex flex-col items-center justify-center bg-[#F5F0E8]" style="gap:16px;padding:40px">
-      <span style="font-size:3rem">📧</span>
-      <h2 style="font-size:1.75rem;font-weight:600">Enter your email</h2>
-      <p style="font-size:1rem;color:#6b7280">We'll send your receipt there</p>
-      <input id="receipt-email" type="email" placeholder="your@email.com"
-        style="width:100%;max-width:380px;padding:14px 16px;border:2px solid #d1d5db;border-radius:10px;font-size:1rem;outline:none;-webkit-user-select:text;user-select:text;background:white"
-        onclick="this.focus()" onfocus="fetch('/api/keyboard/show')" onblur="fetch('/api/keyboard/hide')" />
-      <p id="receipt-status" style="font-size:0.9rem;color:#6b7280;min-height:20px"></p>
-      <div style="display:flex;gap:12px">
-        <button id="send-btn" style="padding:14px 32px;background:#8B6F47;color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer">Send Receipt</button>
-        <button id="skip-btn" style="padding:14px 24px;background:#e5e7eb;color:#374151;border:none;border-radius:12px;font-size:1rem;cursor:pointer">Skip</button>
-      </div>
-    </div>`;
-    el.querySelector('#skip-btn').onclick = () => showThankYouScreen();
-    el.querySelector('#send-btn').onclick = () => {
-      const email = el.querySelector('#receipt-email').value.trim();
-      const status = el.querySelector('#receipt-status');
-      if (!email || !email.includes('@')) {
+    let emailVal = '';
+
+    function sendEmail() {
+      const email = emailVal.trim();
+      const status = document.getElementById('receipt-status');
+      if (!email || !email.includes('@') || !email.includes('.')) {
         status.textContent = 'Please enter a valid email address';
         status.style.color = '#dc2626';
         return;
@@ -1077,13 +1064,54 @@ function renderOrderPlaced(el) {
         order_number: state.orderNumber || 'N/A',
         items: items || 'No items',
         total: total || '0.00'
-      }).then(() => {
-        showThankYouScreen(email);
-      }).catch(err => {
+      }).then(() => { showThankYouScreen(email); })
+      .catch(() => {
         status.textContent = 'Failed to send. Try again.';
         status.style.color = '#dc2626';
       });
-    };
+    }
+
+    function renderKB() {
+      el.innerHTML = `
+      <div class="w-full h-full flex flex-col bg-[#F5F0E8]" style="padding:12px;gap:8px">
+        <div style="text-align:center">
+          <span style="font-size:1.4rem">📧</span>
+          <span style="font-size:1.1rem;font-weight:600;margin-left:8px">Enter email for receipt</span>
+        </div>
+        <div style="background:white;border:2px solid #8B6F47;border-radius:10px;padding:12px 16px;font-size:1.1rem;min-height:44px;word-break:break-all;color:#111">
+          ${emailVal || '<span style="color:#9ca3af">your@email.com</span>'}
+        </div>
+        <p id="receipt-status" style="font-size:0.8rem;color:#6b7280;min-height:16px;text-align:center;margin:0"></p>
+        <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:3px">
+          ${['q','w','e','r','t','y','u','i','o','p'].map(k=>\`<button class="kk" data-k="${k}" style="padding:9px 2px;background:white;border:1px solid #d1d5db;border-radius:6px;font-size:0.95rem;cursor:pointer">${k}</button>\`).join('')}
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:3px;padding:0 5%">
+          ${['a','s','d','f','g','h','j','k','l'].map(k=>\`<button class="kk" data-k="${k}" style="padding:9px 2px;background:white;border:1px solid #d1d5db;border-radius:6px;font-size:0.95rem;cursor:pointer">${k}</button>\`).join('')}
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:3px">
+          ${['z','x','c','v','b','n','m','.','-'].map(k=>\`<button class="kk" data-k="${k}" style="padding:9px 2px;background:white;border:1px solid #d1d5db;border-radius:6px;font-size:0.95rem;cursor:pointer">${k}</button>\`).join('')}
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto auto auto;gap:3px">
+          <button id="kb-at" style="padding:9px;background:#8B6F47;color:white;border:none;border-radius:6px;font-size:1rem;cursor:pointer;font-weight:700">@</button>
+          <button id="kb-del" style="padding:9px 14px;background:#fee2e2;border:1px solid #fca5a5;border-radius:6px;font-size:1rem;cursor:pointer">⌫</button>
+          <button id="kb-dotcom" style="padding:9px 8px;background:#f3f4f6;border:1px solid #d1d5db;border-radius:6px;font-size:0.8rem;cursor:pointer">.com</button>
+          <button id="kb-clear" style="padding:9px 8px;background:#f3f4f6;border:1px solid #d1d5db;border-radius:6px;font-size:0.75rem;cursor:pointer">clear</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <button id="send-btn" style="padding:12px;background:#111827;color:white;border:none;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer">Send Receipt</button>
+          <button id="skip-btn" style="padding:12px;background:#e5e7eb;color:#374151;border:none;border-radius:10px;font-size:1rem;cursor:pointer">Skip</button>
+        </div>
+      </div>\`;
+
+      el.querySelectorAll('.kk').forEach(btn => { btn.onclick = () => { emailVal += btn.dataset.k; renderKB(); }; });
+      el.querySelector('#kb-at').onclick = () => { emailVal += '@'; renderKB(); };
+      el.querySelector('#kb-del').onclick = () => { emailVal = emailVal.slice(0,-1); renderKB(); };
+      el.querySelector('#kb-dotcom').onclick = () => { emailVal += '.com'; renderKB(); };
+      el.querySelector('#kb-clear').onclick = () => { emailVal = ''; renderKB(); };
+      el.querySelector('#skip-btn').onclick = () => showThankYouScreen();
+      el.querySelector('#send-btn').onclick = sendEmail;
+    }
+    renderKB();
   }
 
   function showThankYouScreen(email) {

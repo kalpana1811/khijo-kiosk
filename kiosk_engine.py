@@ -128,29 +128,30 @@ def _ultrasonic_loop():
                         consecutive_far += 1
                         consecutive_near = 0
 
-                    # Person arrived - play audio ONCE
-                    if consecutive_near >= CONFIRM and not _person_present:
-                        _person_present = True
-                        _audio_played = False
-                        print(f"Person confirmed at {distance}cm")
-
-                    if _person_present and not _audio_played and not _session_active and time.time() > _cooldown_until:
-                        _audio_played = True
-                        _cooldown_until = time.time() + 8
-                        print(f"Speaking: Tap your Bite card (session_active={_session_active})")
-                        speak_async("Tap your Bite card")
-                    elif _person_present and not _audio_played:
-                        print(f"Blocked: audio_played={_audio_played} session_active={_session_active} cooldown={max(0,round(_cooldown_until-time.time(),1))}s")
-
-                    # Person left - reset everything
-                    if consecutive_far >= CONFIRM and _person_present:
-                        _person_present = False
-                        _audio_played = False
-                        consecutive_near = 0
-                        print("Person left")
-
                 except:
-                    pass
+                    time.sleep(0.5)
+                    continue
+
+                # Person arrived - play audio ONCE (moved outside try block)
+                if consecutive_near >= CONFIRM and not _person_present:
+                    _person_present = True
+                    _audio_played = False
+                    print(f"Person confirmed at {distance}cm")
+
+                if _person_present and not _audio_played and not _session_active and time.time() > _cooldown_until:
+                    _audio_played = True
+                    _cooldown_until = time.time() + 8
+                    print(f"Speaking: Tap your Bite card")
+                    speak_async("Tap your Bite card")
+                elif _person_present and not _audio_played:
+                    print(f"Blocked: session_active={_session_active} cooldown={max(0,round(_cooldown_until-time.time(),1))}s")
+
+                # Person left - reset everything
+                if consecutive_far >= CONFIRM and _person_present:
+                    _person_present = False
+                    _audio_played = False
+                    consecutive_near = 0
+                    print("Person left")
 
                 time.sleep(0.5)
             except Exception as e:

@@ -72,7 +72,7 @@ def play_next_ting():
         os.system('aplay /tmp/ting.wav 2>/dev/null')
     threading.Thread(target=_play, daemon=True).start()
     # Add cooldown so "tap your card" doesn't play immediately
-    _cooldown_until = time.time() + 3
+    _cooldown_until = time.time() + 6
     _audio_played = False
     _person_present = False
 
@@ -102,7 +102,7 @@ def _ultrasonic_loop():
 
         consecutive_near = 0
         consecutive_far = 0
-        THRESHOLD = 50  # cm
+        THRESHOLD = 35  # cm
         CONFIRM = 1     # consecutive readings needed
 
         while True:
@@ -145,7 +145,7 @@ def _ultrasonic_loop():
 
                 if _person_present and not _audio_played and not _session_active and time.time() > _cooldown_until:
                     _audio_played = True
-                    _cooldown_until = time.time() + 5  # 5 second cooldown between speaks
+                    _cooldown_until = time.time() + 6  # 6 second cooldown between speaks
                     print(f"Speaking: Tap your Bite card")
                     speak_async("Tap your Bite card")
                 elif _person_present and not _audio_played:
@@ -244,7 +244,7 @@ def end_session():
     _session_active = False
     _audio_played = False
     _person_present = False
-    _cooldown_until = time.time() + 3  # 3 second pause before next "tap your card"
+    _cooldown_until = time.time() + 9  # 9 second pause before next "tap your card"
 
 def group_by_category(safe_menu):
     grouped = {}

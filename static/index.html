@@ -1044,47 +1044,54 @@ function renderOrderPlaced(el) {
   }
 
   function showEmailScreen() {
-    el.innerHTML = `
-    <div class="w-full h-full flex flex-col items-center justify-center bg-[#F5F0E8]" style="gap:16px;padding:40px">
-      <span style="font-size:3rem">📧</span>
-      <h2 style="font-size:1.75rem;font-weight:600">Enter your email</h2>
-      <p style="font-size:1rem;color:#6b7280">We'll send your receipt there</p>
-      <input id="receipt-email" type="email" placeholder="your@email.com"
-        style="width:100%;max-width:380px;padding:14px 16px;border:2px solid #d1d5db;border-radius:10px;font-size:1rem;outline:none;-webkit-user-select:text;user-select:text;background:white"
-        onclick="this.focus()" onfocus="fetch('/api/keyboard/show')" onblur="fetch('/api/keyboard/hide')" />
-      <p id="receipt-status" style="font-size:0.9rem;color:#6b7280;min-height:20px"></p>
-      <div style="display:flex;gap:12px">
-        <button id="send-btn" style="padding:14px 32px;background:#8B6F47;color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer">Send Receipt</button>
-        <button id="skip-btn" style="padding:14px 24px;background:#e5e7eb;color:#374151;border:none;border-radius:12px;font-size:1rem;cursor:pointer">Skip</button>
-      </div>
-    </div>`;
-    el.querySelector('#skip-btn').onclick = () => showThankYouScreen();
-    el.querySelector('#send-btn').onclick = () => {
-      const email = el.querySelector('#receipt-email').value.trim();
-      const status = el.querySelector('#receipt-status');
-      if (!email || !email.includes('@')) {
-        status.textContent = 'Please enter a valid email address';
-        status.style.color = '#dc2626';
-        return;
-      }
-      status.textContent = 'Sending...';
-      status.style.color = '#6b7280';
-      const cart = state.lastCart || [];
-      const items = cart.map(i => i.dish.name + ' x' + i.qty + ' - \u00a3' + (i.dish.price * i.qty).toFixed(2)).join('\n');
-      const total = cart.reduce((s,i) => s + i.dish.price * i.qty, 0).toFixed(2);
-      emailjs.send('service_fekefrj', 'template_gaydd9o', {
-        to_email: email,
-        order_number: state.orderNumber || 'N/A',
-        items: items || 'No items',
-        total: total || '0.00'
-      }).then(() => {
-        showThankYouScreen(email);
-      }).catch(err => {
-        status.textContent = 'Failed to send. Try again.';
-        status.style.color = '#dc2626';
-      });
-    };
+    var ev = '';
+    function upd() {
+      var d = document.getElementById('ed');
+      if(d) d.innerHTML = ev ? ev : '<span style="color:#9ca3af">tap keys below</span>';
+    }
+    function send() {
+      var st = document.getElementById('rs');
+      var email = ev.trim();
+      if (!email.includes('@') || !email.includes('.')) { st.textContent='Invalid email'; st.style.color='#dc2626'; return; }
+      st.textContent = 'Sending...'; st.style.color = '#6b7280';
+      var cart = state.lastCart || [];
+      var items = cart.map(function(i){ return i.dish.name+' x'+i.qty+' - \u00a3'+(i.dish.price*i.qty).toFixed(2); }).join('\n');
+      var total = cart.reduce(function(s,i){ return s+i.dish.price*i.qty; },0).toFixed(2);
+      emailjs.send('service_fekefrj','template_gaydd9o',{to_email:email,order_number:state.orderNumber||'N/A',items:items||'No items',total:total||'0.00'})
+        .then(function(){ showThankYouScreen(email); })
+        .catch(function(){ st.textContent='Failed. Try again.'; st.style.color='#dc2626'; });
+    }
+    var rows=[['q','w','e','r','t','y','u','i','o','p'],['a','s','d','f','g','h','j','k','l'],['z','x','c','v','b','n','m','.','-']];
+    var ks='flex:1;padding:11px 2px;background:white;border:1px solid #d1d5db;border-radius:6px;font-size:1rem;cursor:pointer;font-weight:500';
+    var html='<div style="width:100%;height:100%;display:flex;flex-direction:column;background:#F5F0E8;padding:12px;gap:6px;box-sizing:border-box">';
+    html+='<div style="display:flex;align-items:center;gap:8px;padding:2px 0"><span style="font-size:1.5rem">&#128231;</span><span style="font-size:1.35rem;font-weight:700">Enter email for receipt</span></div>';
+    html+='<div id="ed" style="background:white;border:2px solid #8B6F47;border-radius:8px;padding:10px 14px;font-size:1.05rem;min-height:42px;word-break:break-all;color:#111"><span style="color:#9ca3af">tap keys below</span></div>';
+    html+='<p id="rs" style="font-size:0.78rem;text-align:center;margin:0;min-height:14px;color:#6b7280"></p>';
+    rows.forEach(function(row){
+      html+='<div style="display:flex;gap:3px">';
+      row.forEach(function(k){ html+='<button data-k="'+k+'" class="ek" style="'+ks+'">'+k+'</button>'; });
+      html+='</div>';
+    });
+    html+='<div style="display:flex;gap:3px">';
+    html+='<button id="k-at" style="flex:2;padding:11px;background:#8B6F47;color:white;border:none;border-radius:6px;font-size:1.1rem;font-weight:700;cursor:pointer">@</button>';
+    html+='<button id="k-dc" style="flex:2;padding:11px;background:#EDE5D8;border:1px solid #c9b99a;border-radius:6px;font-size:0.9rem;font-weight:600;cursor:pointer">.com</button>';
+    html+='<button id="k-dl" style="flex:1;padding:11px;background:#fee2e2;border:1px solid #fca5a5;border-radius:6px;font-size:1.1rem;cursor:pointer">&#9003;</button>';
+    html+='<button id="k-cl" style="flex:1;padding:11px;background:#f3f4f6;border:1px solid #d1d5db;border-radius:6px;font-size:0.78rem;color:#6b7280;cursor:pointer">clear</button>';
+    html+='</div>';
+    html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:2px">';
+    html+='<button id="k-snd" style="padding:14px;background:#111827;color:white;border:none;border-radius:10px;font-size:1.05rem;font-weight:700;cursor:pointer;letter-spacing:0.02em">&#10003; Send Receipt</button>';
+    html+='<button id="k-sk" style="padding:14px;background:#e5e7eb;color:#374151;border:1px solid #d1d5db;border-radius:10px;font-size:1rem;cursor:pointer">Skip</button>';
+    html+='</div></div>';
+    el.innerHTML = html;
+    el.querySelectorAll('.ek').forEach(function(b){ b.onclick=function(){ ev+=b.dataset.k; upd(); }; });
+    document.getElementById('k-at').onclick=function(){ ev+='@'; upd(); };
+    document.getElementById('k-dc').onclick=function(){ ev+='.com'; upd(); };
+    document.getElementById('k-dl').onclick=function(){ ev=ev.slice(0,-1); upd(); };
+    document.getElementById('k-cl').onclick=function(){ ev=''; upd(); };
+    document.getElementById('k-sk').onclick=function(){ showThankYouScreen(); };
+    document.getElementById('k-snd').onclick=send;
   }
+
 
   function showThankYouScreen(email) {
     el.innerHTML = `

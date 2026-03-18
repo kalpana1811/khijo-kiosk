@@ -38,6 +38,7 @@ _uid_lock = threading.Lock()
 _person_present = False
 _audio_played = False  # tracks if we already played audio for this person
 _session_active = False  # True when user is on menu screen
+_cooldown_until = 0  # timestamp - dont trigger audio before this time
 
 # ── Audio helpers ──
 def speak_async(text):
@@ -133,8 +134,9 @@ def _ultrasonic_loop():
                         _audio_played = False
                         print(f"Person confirmed at {distance}cm")
 
-                    if _person_present and not _audio_played and not _session_active:
+                    if _person_present and not _audio_played and not _session_active and time.time() > _cooldown_until:
                         _audio_played = True
+                        _cooldown_until = time.time() + 10
                         speak_async("Tap your Bite card")
 
                     # Person left - reset everything
@@ -230,10 +232,11 @@ def get_session(uid=None):
     }
 
 def end_session():
-    global _session_active, _audio_played, _person_present
+    global _session_active, _audio_played, _person_present, _cooldown_until
     _session_active = False
     _audio_played = False
     _person_present = False
+    _cooldown_until = time.time() + 6  # 6 second pause after session ends
 
 def group_by_category(safe_menu):
     grouped = {}

@@ -162,7 +162,7 @@ def _ultrasonic_loop():
 
 # ── RFID background thread ──
 def _rfid_loop():
-    global _last_uid, _person_present, _audio_played
+    global _last_uid, _person_present, _audio_played, _session_active
     try:
         from mfrc522 import SimpleMFRC522
         import RPi.GPIO as GPIO

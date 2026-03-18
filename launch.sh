@@ -31,8 +31,4 @@ DISPLAY=:0 chromium-browser \
   --enable-viewport \
   --touch-devices=1 \
   --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' \
-  http://localhost:5001 &
-
-# Start onboard keyboard after Chromium loads
-sleep 6
-DISPLAY=:0 onboard &
+  http://localhost:5001

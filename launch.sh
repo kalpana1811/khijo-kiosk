@@ -10,10 +10,6 @@ cd ~/khijo-kiosk
 sudo python3 led_controller.py &
 sleep 1
 
-# Start onboard keyboard
-DISPLAY=:0 onboard &
-sleep 1
-
 # Start Flask server
 python3 app.py &
 sleep 3
@@ -35,4 +31,8 @@ DISPLAY=:0 chromium-browser \
   --enable-viewport \
   --touch-devices=1 \
   --simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT' \
-  http://localhost:5001
+  http://localhost:5001 &
+
+# Start onboard keyboard after Chromium loads
+sleep 6
+DISPLAY=:0 onboard &

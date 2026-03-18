@@ -66,10 +66,15 @@ def play_ding():
 
 def play_next_ting():
     """Short ting for next customer"""
+    global _cooldown_until, _audio_played, _person_present
     def _play():
         _gen_beep('/tmp/ting.wav', 1046, 0.25)
         os.system('aplay /tmp/ting.wav 2>/dev/null')
     threading.Thread(target=_play, daemon=True).start()
+    # Add cooldown so "tap your card" doesn't play immediately
+    _cooldown_until = time.time() + 3
+    _audio_played = False
+    _person_present = False
 
 def play_order_beep():
     """Order placed beep - two ascending tones"""
@@ -239,7 +244,7 @@ def end_session():
     _session_active = False
     _audio_played = False
     _person_present = False
-    _cooldown_until = 0  # No pause - ready for next customer immediately
+    _cooldown_until = time.time() + 3  # 3 second pause before next "tap your card"
 
 def group_by_category(safe_menu):
     grouped = {}

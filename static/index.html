@@ -1051,7 +1051,7 @@ function renderOrderPlaced(el) {
       <p style="font-size:1rem;color:#6b7280">We'll send your receipt there</p>
       <input id="receipt-email" type="email" placeholder="your@email.com"
         style="width:100%;max-width:380px;padding:14px 16px;border:2px solid #d1d5db;border-radius:10px;font-size:1rem;outline:none;-webkit-user-select:text;user-select:text;background:white"
-        onclick="this.focus()" />
+        onclick="this.focus()" onfocus="fetch('/api/keyboard/show')" onblur="fetch('/api/keyboard/hide')" />
       <p id="receipt-status" style="font-size:0.9rem;color:#6b7280;min-height:20px"></p>
       <div style="display:flex;gap:12px">
         <button id="send-btn" style="padding:14px 32px;background:#8B6F47;color:white;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer">Send Receipt</button>

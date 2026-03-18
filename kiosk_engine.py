@@ -145,7 +145,7 @@ def _ultrasonic_loop():
 
                 if _person_present and not _audio_played and not _session_active and time.time() > _cooldown_until:
                     _audio_played = True
-                    _cooldown_until = time.time() + 6  # 6 second cooldown between speaks
+                    _cooldown_until = time.time() + 4  # 6 second cooldown between speaks
                     print(f"Speaking: Tap your Bite card")
                     speak_async("Tap your Bite card")
                 elif _person_present and not _audio_played:
@@ -244,7 +244,7 @@ def end_session():
     _session_active = False
     _audio_played = False
     _person_present = False
-    _cooldown_until = time.time() + 9  # 9 second pause before next "tap your card"
+    _cooldown_until = time.time() + 6  # 9 second pause before next "tap your card"
 
 def group_by_category(safe_menu):
     grouped = {}
